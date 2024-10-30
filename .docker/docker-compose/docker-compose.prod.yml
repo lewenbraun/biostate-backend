@@ -1,0 +1,39 @@
+version: '3.9'
+
+name: scaffolding
+services:
+  soketi:
+    container_name: 'soketi-server'
+    restart: unless-stopped
+    image: 'quay.io/soketi/soketi:1.6-16-alpine'
+    ports:
+      - ${PUSHER_PORT:-6001}:6001
+    environment:
+      - SOKETI_DEBUG=0
+      - SOKETI_PORT=6001
+      - SOKETI_DEFAULT_APP_KEY=${PUSHER_APP_KEY:-app-key}
+      - SOKETI_DEFAULT_APP_ID=${PUSHER_APP_ID:-some-id}
+      - SOKETI_DEFAULT_APP_SECRET=${PUSHER_APP_SECRET:-some-app-secret}
+      - SOKETI_PRESENCE_MAX_MEMBERS=1000
+    networks:
+      - network
+
+  redis:
+    container_name: 'redis-server'
+    restart: unless-stopped
+    image: 'redis:7.2.3-alpine'
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+    volumes:
+      - container-volume:/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+    networks:
+      - network
+
+networks:
+  network:
+volumes:
+  container-volume:

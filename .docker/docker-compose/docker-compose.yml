@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+    wte-app:
+        build:
+            context: ../../
+            dockerfile: .docker/php/Dockerfile
+        container_name: wte-app
+        restart: unless-stopped
+        tty: true
+        environment:
+            - no_proxy=.wte-app
+        working_dir: /var/www
+        volumes:
+            - ../../:/var/www
+            - ../php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - wte-app-network
+
+    wte-nginx:
+        image: nginx:latest
+        container_name: wte-nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        volumes:
+            - ../../:/var/www
+            - ../nginx:/etc/nginx/conf.d
+        networks:
+            - wte-app-network
+
+    wte-db:
+        image: postgres:latest
+        container_name: wte-db
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: laravel
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: secret
+        ports:
+            - "5432:5432"
+        volumes:
+            - wte-db-data:/var/lib/postgresql/data
+        networks:
+            - wte-app-network
+
+networks:
+    wte-app-network:
+        driver: bridge
+
+volumes:
+    wte-db-data:
+        driver: local
