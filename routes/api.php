@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
+use App\Http\Controllers\API\V1\DailyMealController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +26,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::group(['prefix' => 'daily-meal'], function () {
+        Route::post('/add-product', [DailyMealController::class, 'addProduct']);
+        Route::get('/{date}', [ProductController::class, 'show']);
+    });
 });
 
+Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductController::class, 'index']);
