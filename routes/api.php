@@ -26,14 +26,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::group(['prefix' => 'daily-meal'], function () {
+        Route::get('/', [DailyMealController::class, 'show']);
         Route::post('/add-product', [DailyMealController::class, 'addProduct']);
-        Route::get('/{date}', [ProductController::class, 'show']);
     });
 });
 
-Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductController::class, 'index']);
