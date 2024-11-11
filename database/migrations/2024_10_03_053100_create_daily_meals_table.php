@@ -15,9 +15,8 @@ return new class () extends Migration {
         Schema::create('daily_meals', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Product::class);
             $table->integer('meal_order');
-            $table->dateTime('date_and_time')->nullable();
+            $table->date('date')->nullable();
             $table->float('weight')->nullable();
             $table->timestamps();
         });
