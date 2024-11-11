@@ -30,7 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(['prefix' => 'daily-meal'], function () {
         Route::get('/', [DailyMealController::class, 'show']);
-        Route::post('/add-product', [DailyMealController::class, 'addProduct']);
+        Route::post('/product/add', [DailyMealController::class, 'addProduct']);
+        Route::post('/product/delete', [DailyMealController::class, 'deleteProduct']);
+        Route::post('/product/increase-count', [DailyMealController::class, 'increaseCountProduct']);
+        Route::post('/product/decrease-count', [DailyMealController::class, 'decreaseCountProduct']);
+        Route::post('/meal/create', [DailyMealController::class, 'createMeal']);
     });
 });
 

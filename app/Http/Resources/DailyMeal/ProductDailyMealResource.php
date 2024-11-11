@@ -25,6 +25,7 @@ class ProductDailyMealResource extends JsonResource
             'proteins' => $this->proteins,
             'carbs' => $this->carbs,
             'fats' => $this->fats,
+            'count' => $this->pivot->count,
         ];
     }
 }
