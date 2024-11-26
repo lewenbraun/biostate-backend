@@ -14,9 +14,9 @@ class DailyMealController extends Controller
     public function createMeal(Request $request)
     {
         $dailyMeal = DailyMeal::create([
-            'date' => $request->date,
-            'meal_order' => $request->meal_order,
-            'user_id' => auth()->id(),
+           'date' => $request->date,
+           'meal_order' => $request->meal_order,
+           'user_id' => auth()->id(),
         ]);
 
         return $dailyMeal;

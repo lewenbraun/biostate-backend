@@ -19,7 +19,6 @@ class DailyMealResource extends JsonResource
             'products' => ProductDailyMealResource::collection($this->products),
             'meal_order' => $this->meal_order,
             'date' => $this->date,
-            'weight' => $this->weight,
         ];
     }
 }
