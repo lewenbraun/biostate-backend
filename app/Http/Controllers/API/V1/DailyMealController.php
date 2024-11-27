@@ -22,6 +22,13 @@ class DailyMealController extends Controller
         return $dailyMeal;
     }
 
+    public function deleteMeal(Request $request)
+    {
+        $dailyMeal = DailyMeal::findOrFail($request->meal_id)->delete();
+
+        return $dailyMeal;
+    }
+
     public function addProduct(AddProductToMealRequest $request)
     {
         // Один запрос для нахождения либо существующего DailyMeal, либо возвращения null
