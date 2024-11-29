@@ -22,7 +22,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'category_id' => $request->category_id['id'],
+            'category_id' => $request->category_id,
             'image' => $request->image,
             'calories' => $request->calories,
             'proteins' => $request->proteins,

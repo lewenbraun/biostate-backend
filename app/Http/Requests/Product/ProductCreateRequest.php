@@ -23,8 +23,8 @@ class ProductCreateRequest extends FormRequest
     {
         return [
             'name' => 'string|required',
-            'description' => 'string',
-            'price' => 'integer',
+            'description' => 'nullable|string',
+            'price' => 'nullable|integer',
             'category_id' => 'integer|exists:categories,id',
             'for_weight' => 'nullable|float|required_with:calories,proteins,carbs,fats',
             'calories' => 'nullable|float',
