@@ -2,10 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\V1\MealController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
-use App\Http\Controllers\API\V1\DailyMealController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,13 +29,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::group(['prefix' => 'daily-meal'], function () {
-        Route::get('/', [DailyMealController::class, 'show']);
-        Route::post('/product/add', [DailyMealController::class, 'addProduct']);
-        Route::post('/product/delete', [DailyMealController::class, 'deleteProduct']);
-        Route::post('/product/increase-count', [DailyMealController::class, 'increaseCountProduct']);
-        Route::post('/product/decrease-count', [DailyMealController::class, 'decreaseCountProduct']);
-        Route::post('/meal/create', [DailyMealController::class, 'createMeal']);
-        Route::post('/meal/delete', [DailyMealController::class, 'deleteMeal']);
+        Route::get('/', [MealController::class, 'show']);
+        Route::post('/product/add', [MealController::class, 'addProduct']);
+        Route::post('/product/delete', [MealController::class, 'deleteProduct']);
+        Route::post('/product/increase-count', [MealController::class, 'increaseCountProduct']);
+        Route::post('/product/decrease-count', [MealController::class, 'decreaseCountProduct']);
+        Route::post('/meal/create', [MealController::class, 'createMeal']);
+        Route::post('/meal/delete', [MealController::class, 'deleteMeal']);
     });
 });
 

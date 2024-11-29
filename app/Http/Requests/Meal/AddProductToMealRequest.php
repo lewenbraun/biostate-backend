@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\DailyMeal;
+namespace App\Http\Requests\Meal;
 
 use Illuminate\Foundation\Http\FormRequest;
 

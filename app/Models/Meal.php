@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class DailyMeal extends Model
+class Meal extends Model
 {
     protected $guarded = [];
 
     /**
-     * The roles that belong to the DailyMeal
+     * The roles that belong to the Meal
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

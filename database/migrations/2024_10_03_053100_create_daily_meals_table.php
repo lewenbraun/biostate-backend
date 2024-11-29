@@ -12,7 +12,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('daily_meals', function (Blueprint $table) {
+        Schema::create('meals', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
             $table->integer('meal_order');
@@ -27,6 +27,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_meals');
+        Schema::dropIfExists('meals');
     }
 };
