@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductCreateRequest;
 
 class ProductController extends Controller
 {
@@ -15,7 +16,7 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(ProductCreateRequest $request): JsonResponse
     {
         $product = Product::create([
             'name' => $request->name,
@@ -30,7 +31,11 @@ class ProductController extends Controller
         ]);
 
 
-        return response()->json($product, 201);
+        if ($product) {
+            return response()->json($product, 201);
+        } else {
+            return response()->json(['message' => 'Failed to create product'], 500);
+        }
     }
 
     public function show(Product $product): JsonResponse

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\DailyMeal;
+namespace App\Http\Resources\Meal;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductDailyMealResource extends JsonResource
+class ProductMealResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

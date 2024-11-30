@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\DailyMeal;
+namespace App\Http\Resources\Meal;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\Meal\ProductMealResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DailyMealResource extends JsonResource
+class MealResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +17,9 @@ class DailyMealResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'products' => ProductDailyMealResource::collection($this->products),
+            'products' => ProductMealResource::collection($this->products),
             'meal_order' => $this->meal_order,
             'date' => $this->date,
-            'weight' => $this->weight,
         ];
     }
 }

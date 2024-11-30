@@ -10,9 +10,9 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('daily_meal_product', function (Blueprint $table) {
+        Schema::create('meal_product', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('daily_meal_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('meal_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->integer('count')->default(1);
             $table->timestamps();
@@ -24,6 +24,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_meal_products');
+        Schema::dropIfExists('meal_products');
     }
 };
