@@ -2,11 +2,15 @@
 
 namespace App\Http\Services\Meal;
 
+use App\Http\DTO\Meal\Product\FormattedProductFeaturesDTO;
+use App\Http\DTO\Meal\Product\ProductFeaturesDTO;
 use App\Models\Meal;
 use App\Models\MealProduct;
 
 final class ProductService
 {
+    private const WEIGHT_FACTOR_BASE = 100;
+
     public function addProductOrIncreaseCountIntoMeal(int $product_id, Meal $meal)
     {
         try {
@@ -35,5 +39,24 @@ final class ProductService
     {
         $product->pivot->count -= 1;
         $product->pivot->save();
+    }
+
+    public function formatWeight(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
+    {
+        $factor = self::WEIGHT_FACTOR_BASE / $productFeatures->weight;
+
+        $formattedFeatures = new FormattedProductFeaturesDTO();
+
+        $formattedFeatures->calories = self::calculateQuantity($productFeatures->calories, $factor);
+        $formattedFeatures->proteins = self::calculateQuantity($productFeatures->proteins, $factor);
+        $formattedFeatures->carbs = self::calculateQuantity($productFeatures->carbs, $factor);
+        $formattedFeatures->fats = self::calculateQuantity($productFeatures->fats, $factor);
+
+        return $formattedFeatures;
+    }
+
+    private function calculateQuantity(float $feature, float $factor): float
+    {
+        return round($feature * $factor);
     }
 }

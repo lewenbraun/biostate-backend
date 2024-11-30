@@ -26,11 +26,11 @@ class ProductCreateRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'nullable|integer',
             'category_id' => 'integer|exists:categories,id',
-            'for_weight' => 'nullable|float|required_with:calories,proteins,carbs,fats',
-            'calories' => 'nullable|float',
-            'proteins' => 'nullable|float',
-            'carbs' => 'nullable|float',
-            'fats' => 'nullable|float',
+            'for_weight' => 'nullable|decimal:0,3|required_with:calories,proteins,carbs,fats',
+            'calories' => 'nullable|decimal:0,3',
+            'proteins' => 'nullable|decimal:0,3',
+            'carbs' => 'nullable|decimal:0,3',
+            'fats' => 'nullable|decimal:0,3',
         ];
     }
 }
