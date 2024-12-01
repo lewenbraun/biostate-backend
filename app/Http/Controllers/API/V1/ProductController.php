@@ -35,6 +35,7 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
+                'weight' => $request->weight,
                 'category_id' => $request->category_id,
                 'image' => $request->image,
                 'calories' => $formattedFeatures->calories,

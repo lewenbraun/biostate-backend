@@ -11,7 +11,7 @@ final class ProductService
 {
     private const WEIGHT_FACTOR_BASE = 100;
 
-    public function addProductOrIncreaseCountIntoMeal(int $product_id, Meal $meal)
+    public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal)
     {
         try {
             $product = $meal->products->firstWhere('id', $product_id);
@@ -22,6 +22,7 @@ final class ProductService
                 MealProduct::create([
                     'product_id' => $product_id,
                     'meal_id' => $meal->id,
+                    'weight_product' => $weight,
                 ]);
             }
         } catch (\Exception $e) {
@@ -43,7 +44,7 @@ final class ProductService
 
     public function formatWeight(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
     {
-        $factor = self::WEIGHT_FACTOR_BASE / $productFeatures->weight;
+        $factor = self::WEIGHT_FACTOR_BASE / $productFeatures->weight_for_features;
 
         $formattedFeatures = new FormattedProductFeaturesDTO();
 
@@ -55,8 +56,9 @@ final class ProductService
         return $formattedFeatures;
     }
 
-    private function calculateQuantity(float $feature, float $factor): float
+    private function calculateQuantity(?float $feature, float $factor): float
     {
         return round($feature * $factor);
     }
+
 }

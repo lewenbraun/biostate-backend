@@ -15,6 +15,7 @@ return new class () extends Migration {
             $table->foreignId('meal_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->integer('count')->default(1);
+            $table->float('weight_product');
             $table->timestamps();
         });
     }
