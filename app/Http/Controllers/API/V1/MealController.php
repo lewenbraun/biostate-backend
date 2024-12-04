@@ -43,7 +43,7 @@ class MealController extends Controller
             ->where('meal_order', $request->meal_order)
             ->first();
 
-        $this->productService->addProductOrIncreaseCountIntoMeal($request->product_id, $meal);
+        $this->productService->addProductOrIncreaseCountIntoMeal($request->product_id, $request->weight, $meal);
     }
 
     public function show(Request $request)

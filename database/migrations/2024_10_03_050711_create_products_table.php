@@ -16,7 +16,7 @@ return new class () extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->float('price')->nullable();
-            $table->integer('weight')->nullable();
+            $table->float('weight')->nullable();
             $table->string('image')->nullable();
             $table->foreignIdFor(Category::class)->nullable();
             $table->float('calories')->nullable();

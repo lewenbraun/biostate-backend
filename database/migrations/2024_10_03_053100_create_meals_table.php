@@ -17,7 +17,6 @@ return new class () extends Migration {
             $table->foreignIdFor(User::class);
             $table->integer('meal_order');
             $table->date('date')->nullable();
-            $table->float('weight')->nullable();
             $table->timestamps();
         });
     }
