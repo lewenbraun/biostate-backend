@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Meal;
+use App\Models\MealProduct;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Meal\MealResource;
@@ -97,5 +98,21 @@ class MealController extends Controller
         }
 
         return response()->json(['message' => 'Product deleted successfully']);
+    }
+
+    public function updateWeightProduct(Request $request)
+    {
+        try {
+            $mealProduct = MealProduct::where('meal_id', $request->meal_id)
+                ->where('product_id', $request->product_id)
+                ->first();
+            $mealProduct->weight_product = $request->changed_weight;
+            $mealProduct->save();
+
+            return response()->json(['message' => 'Product changed weight successfully']);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

@@ -14,12 +14,14 @@ class ProductMealResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $weight = is_null($this->pivot->weight_product) ? $this->weight : $this->pivot->weight_product;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
-            'weight' => $this->weight,
+            'weight' => $weight,
             'image' => $this->image,
             'calories' => $this->calories,
             'proteins' => $this->proteins,

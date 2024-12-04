@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/product/delete', [MealController::class, 'deleteProduct']);
         Route::post('/product/increase-count', [MealController::class, 'increaseCountProduct']);
         Route::post('/product/decrease-count', [MealController::class, 'decreaseCountProduct']);
+        Route::post('/product/update-weight', [MealController::class, 'updateWeightProduct']);
         Route::post('/meal/create', [MealController::class, 'createMeal']);
         Route::post('/meal/delete', [MealController::class, 'deleteMeal']);
     });

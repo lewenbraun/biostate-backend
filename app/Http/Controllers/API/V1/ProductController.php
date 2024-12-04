@@ -28,21 +28,24 @@ class ProductController extends Controller
     public function store(ProductCreateRequest $request): JsonResponse
     {
         try {
-            $productFeatures = ProductFeaturesDTO::fromRequest($request);
-            $formattedFeatures = $this->productService->formatWeight($productFeatures);
-
-            $product = Product::create([
+            $productData = [
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
                 'weight' => $request->weight,
                 'category_id' => $request->category_id,
                 'image' => $request->image,
-                'calories' => $formattedFeatures->calories,
-                'proteins' => $formattedFeatures->proteins,
-                'carbs' => $formattedFeatures->carbs,
-                'fats' => $formattedFeatures->fats,
-            ]);
+            ];
+
+            if ($request->weight_for_features) {
+                $productFeatures = ProductFeaturesDTO::fromRequest($request);
+                $formattedFeatures = $this->productService->formatWeight($productFeatures);
+                $productData['calories'] = $formattedFeatures->calories;
+                $productData['proteins'] = $formattedFeatures->proteins;
+                $productData['carbs'] = $formattedFeatures->carbs;
+                $productData['fats'] = $formattedFeatures->fats;
+            }
+            $product = Product::create($productData);
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

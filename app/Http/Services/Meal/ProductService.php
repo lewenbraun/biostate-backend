@@ -60,5 +60,4 @@ final class ProductService
     {
         return round($feature * $factor);
     }
-
 }
