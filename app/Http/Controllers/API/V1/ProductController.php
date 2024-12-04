@@ -39,7 +39,7 @@ class ProductController extends Controller
 
             if ($request->weight_for_features) {
                 $productFeatures = ProductFeaturesDTO::fromRequest($request);
-                $formattedFeatures = $this->productService->formatWeight($productFeatures);
+                $formattedFeatures = $this->productService->formatFeatures($productFeatures);
                 $productData['calories'] = $formattedFeatures->calories;
                 $productData['proteins'] = $formattedFeatures->proteins;
                 $productData['carbs'] = $formattedFeatures->carbs;

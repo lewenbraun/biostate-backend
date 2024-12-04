@@ -42,7 +42,7 @@ final class ProductService
         $product->pivot->save();
     }
 
-    public function formatWeight(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
+    public function formatFeatures(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
     {
         $factor = self::WEIGHT_FACTOR_BASE / $productFeatures->weight_for_features;
 

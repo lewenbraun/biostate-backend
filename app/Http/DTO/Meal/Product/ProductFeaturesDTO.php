@@ -22,4 +22,15 @@ class ProductFeaturesDTO
         $dto->fats = $request->fats;
         return $dto;
     }
+
+    public static function fromResource($resource)
+    {
+        $dto = new self();
+        $dto->weight_for_features = (int) $resource->pivot->weight_product;
+        $dto->calories = $resource->calories;
+        $dto->proteins = $resource->proteins;
+        $dto->carbs = $resource->carbs;
+        $dto->fats = $resource->fats;
+        return $dto;
+    }
 }
