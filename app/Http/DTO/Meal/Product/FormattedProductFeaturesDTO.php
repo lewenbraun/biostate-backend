@@ -18,4 +18,14 @@ class FormattedProductFeaturesDTO
         $dto->fats = $data['fats'];
         return $dto;
     }
+
+    public static function toArray(self $dto): array
+    {
+        return [
+            'calories' => $dto->calories,
+            'proteins' => $dto->proteins,
+            'carbs' => $dto->carbs,
+            'fats' => $dto->fats,
+        ];
+    }
 }

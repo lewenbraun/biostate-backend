@@ -26,7 +26,7 @@ class ProductCreateRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'nullable|integer',
             'category_id' => 'integer|exists:categories,id',
-            'for_weight' => 'nullable|decimal:0,3|required_with:calories,proteins,carbs,fats',
+            'weight_for_features' => 'nullable|decimal:0,3|required_with:calories,proteins,carbs,fats',
             'calories' => 'nullable|decimal:0,3',
             'proteins' => 'nullable|decimal:0,3',
             'carbs' => 'nullable|decimal:0,3',
