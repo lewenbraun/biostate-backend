@@ -18,10 +18,6 @@ class ProductMealResource extends JsonResource
     {
         $weight = is_null($this->pivot->weight_product) ? $this->weight : $this->pivot->weight_product;
 
-        $productFeaturesDTO = ProductFeaturesDTO::fromResource($this);
-
-        $formattedProductFeatures = (new ProductService())->formatFeatures($productFeaturesDTO);
-
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -29,12 +25,11 @@ class ProductMealResource extends JsonResource
             'price' => $this->price,
             'weight' => $weight,
             'image' => $this->image,
-            'calories' => $formattedProductFeatures->calories,
-            'proteins' => $formattedProductFeatures->proteins,
-            'carbs' => $formattedProductFeatures->carbs,
-            'fats' => $formattedProductFeatures->fats,
+            'calories' => $this->calories,
+            'proteins' => $this->proteins,
+            'carbs' => $this->carbs,
+            'fats' => $this->fats,
             'count' => $this->pivot->count,
         ];
     }
-
 }
