@@ -25,6 +25,15 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
+    public function search(string $name): JsonResponse
+    {
+        $products = Product::where('name', 'like', '%' . $name . '%')
+            ->orWhere('description', 'like', '%' . $name . '%')
+            ->get();
+
+        return response()->json($products);
+    }
+
     public function store(ProductCreateRequest $request): JsonResponse
     {
         try {
