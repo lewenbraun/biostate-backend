@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\MealController;
+use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::post('/user/update', [UserController::class, 'update']);
     Route::group(['prefix' => 'daily-meal'], function () {
         Route::get('/', [MealController::class, 'show']);
         Route::post('/product/add', [MealController::class, 'addProductIntoMeal']);
