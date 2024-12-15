@@ -15,6 +15,11 @@ return new class () extends Migration {
             $table->string('name')->nullable();
             $table->string('nickname')->unique();
             $table->string('email')->unique();
+            $table->float('weight')->nullable();
+            $table->integer('calories')->nullable();
+            $table->integer('proteins')->nullable();
+            $table->integer('carbs')->nullable();
+            $table->integer('fats')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
