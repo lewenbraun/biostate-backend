@@ -37,9 +37,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/product/update-weight', [MealController::class, 'updateWeightProduct']);
         Route::post('/meal/create', [MealController::class, 'createMeal']);
         Route::post('/meal/delete', [MealController::class, 'deleteMeal']);
+
+        Route::group(['prefix' => 'statistics'], function () {
+            Route::get('/day', [MealController::class, 'statisticsPerDay']);
+        });
     });
 });
-
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductController::class, 'index']);

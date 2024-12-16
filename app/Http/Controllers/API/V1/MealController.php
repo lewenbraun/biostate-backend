@@ -115,4 +115,13 @@ class MealController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function statisticsPerDay(Request $request)
+    {
+        $meals = Meal::where('date', $request->date)
+            ->where('user_id', auth()->id())
+            ->get();
+
+        return $meals;
+    }
 }
