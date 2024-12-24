@@ -48,14 +48,14 @@ Route::group(['prefix' => 'products'], function () {
     Route::post('/', [ProductController::class, 'store']);
     Route::get('/search/{name}', [ProductController::class, 'search']);
     Route::get('/show/{product}', [ProductController::class, 'show']);
-    Route::put('/update/{product}', [ProductController::class, 'update']);
+    Route::post('/update', [ProductController::class, 'update']);
 });
 
 Route::group(['prefix' => 'categories'], function () {
     Route::get('/', [CategoryController::class, 'index']);
     Route::post('/', [CategoryController::class, 'store']);
     Route::get('/{category}', [CategoryController::class, 'show']);
-    Route::put('/{category}', [CategoryController::class, 'update']);
+    Route::post('/{category}', [CategoryController::class, 'update']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);

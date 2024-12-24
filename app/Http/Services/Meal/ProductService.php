@@ -2,14 +2,36 @@
 
 namespace App\Http\Services\Meal;
 
-use App\Http\DTO\Meal\Product\FormattedProductFeaturesDTO;
-use App\Http\DTO\Meal\Product\ProductFeaturesDTO;
 use App\Models\Meal;
 use App\Models\MealProduct;
+use Illuminate\Http\Request;
+use App\Http\DTO\Meal\Product\ProductFeaturesDTO;
+use App\Http\DTO\Meal\Product\FormattedProductFeaturesDTO;
 
 final class ProductService
 {
     private const WEIGHT_FACTOR_BASE = 100;
+
+    public function getFormattedProductData(Request $request)
+    {
+        $productData = [
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'weight_default' => $request->weight_default,
+            'weight_for_features' => $request->weight_for_features,
+            'category_id' => $request->category_id,
+            'image' => $request->image,
+        ];
+
+        if ($request->weight_for_features) {
+            $productFeatures = ProductFeaturesDTO::fromRequest($request);
+            $formattedFeatures = $this->formatFeatures($productFeatures);
+            $formattedProductData = array_merge($productData, $formattedFeatures->toArray());
+        }
+
+        return $formattedProductData;
+    }
 
     public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal)
     {
