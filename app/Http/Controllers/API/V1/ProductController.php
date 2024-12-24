@@ -54,13 +54,18 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-        
+
         return response()->json($product);
     }
 
-    public function delete(Product $product): JsonResponse
+    public function delete(Request $request): JsonResponse
     {
-        $product->delete();
+        try {
+            $product = Product::findOrFail($request->product_id);
+            $product->delete();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
