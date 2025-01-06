@@ -19,13 +19,13 @@ class FormattedProductFeaturesDTO
         return $dto;
     }
 
-    public static function toArray(self $dto): array
+    public function toArray(): array
     {
         return [
-            'calories' => $dto->calories,
-            'proteins' => $dto->proteins,
-            'carbs' => $dto->carbs,
-            'fats' => $dto->fats,
+            'calories' => $this->calories,
+            'proteins' => $this->proteins,
+            'carbs' => $this->carbs,
+            'fats' => $this->fats,
         ];
     }
 }
