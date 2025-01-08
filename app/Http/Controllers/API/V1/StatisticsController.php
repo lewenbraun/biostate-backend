@@ -17,10 +17,12 @@ class StatisticsController extends Controller
         $this->statisticsRepository = $statisticsRepository;
     }
 
-    public function getCaloriesPerWeek(Request $request)
+    public function sumNutrientsForPeriodDate(Request $request): JsonResponse
     {
-        $startDay = Carbon::now()->startOfWeek();
-        $endDay = Carbon::now()->endOfWeek();
-        $caloriesPerWeek = $this->statisticsRepository->getCaloriesForDate($startDay, $endDay);
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+        $nutrient = $request->nutrient;
+        $dataDays = $this->statisticsRepository->getNutrientDataForPeriod($startDate, $endDate, $nutrient);
+        return response()->json($dataDays);
     }
 }
