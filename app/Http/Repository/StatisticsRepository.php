@@ -3,61 +3,47 @@
 namespace App\Http\Repository;
 
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
 
 class StatisticsRepository
 {
-    public function getCaloriesForDate($startDate, $endDate)
+    public function getNutrientDataForPeriod(string $startDate, string $endDate, string $nutrient): array
     {
         $user = auth()->user();
-        $user->meals->with(['products' => function ($query) {
-            $query->select('products.id', 'calories', 'meal_product.weight_product');
-        }])
-            ->sum('calories');
-    }
-
-    public function getNutrientDataForPeriod($startDate, $endDate, $nutrient): array
-    {
-        $user = auth()->user();
+        $daysData = [];
 
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
-        $daysData = [];
-
-        $currentDate = $startDate->copy();
-        while ($currentDate <= $endDate) {
-            $dailyTotal = $user->meals()
-                ->where('date', $currentDate->toDateString())
-                ->with(['products' => function ($query) use ($nutrient) {
-                    $query->select('products.id', $nutrient, 'weight_for_features', 'meal_product.weight_product');
-                }])
-                ->get()
-                ->flatMap(function ($meal) use ($nutrient) {
-                    return $meal->products->map(function ($product) use ($nutrient) {
-                        return $product->$nutrient * ($product->pivot->weight_product / $product->weight_for_features);
-                    });
-                })
-                ->sum();
-            // if (!$dailyTotal->isEmpty()) {
-            //     $dailyTotal = 0;
-            // } else {
-            //     $dailyTotal = $dailyTotal->flatMap(function ($meal) use ($nutrient) {
-            //         return $meal->products->map(function ($product) use ($nutrient) {
-            //             return $product->$nutrient * ($product->pivot->weight_product / $product->weight_for_features);
-            //         });
-            //     })->sum();
-            //     dd($dailyTotal);
-            // }
+        while ($startDate->lte($endDate)) {
+            $dailyTotal = $this->calculateDailyNutrientTotal($user, $startDate, $nutrient);
 
             $daysData[] = [
-                'date' => $currentDate->toDateString(),
+                'date' => $startDate->toDateString(),
                 'total' => $dailyTotal,
             ];
 
-            $currentDate->addDay();
+            $startDate->addDay();
         }
 
         return $daysData;
     }
 
+    private function calculateDailyNutrientTotal(User $user, Carbon $date, string $nutrient): float
+    {
+        $meals = $user->meals()
+            ->whereDate('date', $date)
+                ->with(['products' => function ($query) use ($nutrient) {
+                    $query->select('products.id', $nutrient, 'weight_for_features', 'meal_product.weight_product');
+                }])
+            ->get();
+
+        $sumMeals = $meals->sum(function ($meal) use ($nutrient) {
+            return $meal->products->sum(function ($product) use ($nutrient) {
+                $portionWeight = $product->pivot->weight_product / $product->weight_for_features;
+                return $product->$nutrient * $portionWeight;
+            });
+        });
+
+        return $sumMeals;
+    }
 }
