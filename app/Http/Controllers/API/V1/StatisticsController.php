@@ -6,23 +6,24 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Repository\StatisticsRepository;
+use App\Http\Services\Statistics\NutrientsFormatService;
 
 class StatisticsController extends Controller
 {
-    private $statisticsRepository;
+    private $nutrientsFormatService;
 
-    public function __construct(StatisticsRepository $statisticsRepository)
+    public function __construct(NutrientsFormatService $nutrientsFormatService)
     {
-        $this->statisticsRepository = $statisticsRepository;
+        $this->nutrientsFormatService = $nutrientsFormatService;
     }
 
     public function sumNutrientsForPeriodDate(Request $request): JsonResponse
     {
         $startDate = $request->start_date;
         $endDate = $request->end_date;
-        $nutrient = $request->nutrient;
-        $dataDays = $this->statisticsRepository->getNutrientDataForPeriod($startDate, $endDate, $nutrient);
+        $nutrients = $request->nutrients;
+        $dataDays = $this->nutrientsFormatService->getNutrientDataForPeriod($startDate, $endDate, $nutrients);
+
         return response()->json($dataDays);
     }
 }
