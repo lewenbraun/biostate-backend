@@ -9,6 +9,10 @@ class Meal extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'date' => 'datetime',
+    ];
+
     /**
      * The roles that belong to the Meal
      *

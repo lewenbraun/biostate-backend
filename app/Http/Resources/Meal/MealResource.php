@@ -19,7 +19,7 @@ class MealResource extends JsonResource
             'id' => $this->id,
             'products' => ProductMealResource::collection($this->products),
             'meal_order' => $this->meal_order,
-            'date' => $this->date,
+            'date' => $this->date->format('Y-m-d'),
         ];
     }
 }

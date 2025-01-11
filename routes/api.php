@@ -7,6 +7,7 @@ use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
+use App\Http\Controllers\API\V1\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,15 +45,19 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/day', [MealController::class, 'statisticsPerDay']);
         });
     });
-});
 
-Route::group(['prefix' => 'products'], function () {
-    Route::get('/', [ProductController::class, 'index']);
-    Route::post('/', [ProductController::class, 'store']);
-    Route::get('/search/{name}', [ProductController::class, 'search']);
-    Route::get('/show/{product}', [ProductController::class, 'show']);
-    Route::post('/update', [ProductController::class, 'update']);
-    Route::post('/delete', [ProductController::class, 'delete']);
+    Route::group(['prefix' => 'products'], function () {
+        Route::get('/', [ProductController::class, 'index']);
+        Route::post('/', [ProductController::class, 'store']);
+        Route::get('/search/{name}', [ProductController::class, 'search']);
+        Route::get('/show/{product}', [ProductController::class, 'show']);
+        Route::post('/update', [ProductController::class, 'update']);
+        Route::post('/delete', [ProductController::class, 'delete']);
+    });
+
+    Route::group(['prefix' => 'statistics'], function () {
+        Route::get('/sum-nutrients-for-period-date', [StatisticsController::class, 'sumNutrientsForPeriodDate']);
+    });
 });
 
 Route::group(['prefix' => 'categories'], function () {
@@ -61,6 +66,7 @@ Route::group(['prefix' => 'categories'], function () {
     Route::get('/{category}', [CategoryController::class, 'show']);
     Route::post('/{category}', [CategoryController::class, 'update']);
 });
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
