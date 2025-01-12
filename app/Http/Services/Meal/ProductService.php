@@ -36,7 +36,7 @@ final class ProductService
     public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal)
     {
         try {
-            $product = $meal->products->firstWhere('id', $product_id);
+            $product = $meal->products->where('id', $product_id)->where('pivot.weight_product', $weight)->first();
 
             if ($product) {
                 $this->increaseCountProduct($product);
