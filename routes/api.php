@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\MealController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\ProductController;
-use App\Http\Controllers\API\V1\CategoryController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
 use App\Http\Controllers\API\V1\StatisticsController;
 
@@ -59,14 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/sum-nutrients-for-period-date', [StatisticsController::class, 'sumNutrientsForPeriodDate']);
     });
 });
-
-Route::group(['prefix' => 'categories'], function () {
-    Route::get('/', [CategoryController::class, 'index']);
-    Route::post('/', [CategoryController::class, 'store']);
-    Route::get('/{category}', [CategoryController::class, 'show']);
-    Route::post('/{category}', [CategoryController::class, 'update']);
-});
-
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

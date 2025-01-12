@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
-use App\Models\Category;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -13,10 +12,9 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $category = Category::first() ?? Category::create(['name' => 'Base Products']);
-
         $products = [
             [
+                'user_id' => 1,
                 'name' => 'Chicken Breast',
                 'description' => 'Tender high-quality dietary meat with exceptional protein content',
                 'price' => 250.50,
@@ -28,6 +26,7 @@ class ProductSeeder extends Seeder
                 'fats' => 3.6
             ],
             [
+                'user_id' => 1,
                 'name' => 'Fresh Salmon',
                 'description' => 'Premium cold salmon rich in omega-3 fatty acids',
                 'price' => 890.00,
@@ -39,6 +38,7 @@ class ProductSeeder extends Seeder
                 'fats' => 13.0
             ],
             [
+                'user_id' => 1,
                 'name' => 'Buckwheat Groats',
                 'description' => 'Premium whole grain buckwheat, naturally gluten-free and nutrient-dense',
                 'price' => 120.75,
@@ -50,6 +50,7 @@ class ProductSeeder extends Seeder
                 'fats' => 3.5
             ],
             [
+                'user_id' => 1,
                 'name' => 'Greek Yogurt',
                 'description' => 'Thick, creamy yogurt with high protein content and probiotic benefits',
                 'price' => 180.00,
@@ -61,6 +62,7 @@ class ProductSeeder extends Seeder
                 'fats' => 4.5
             ],
             [
+                'user_id' => 1,
                 'name' => 'Spinach Leaves',
                 'description' => 'Fresh organic baby spinach, packed with vitamins and minerals',
                 'price' => 95.50,
@@ -72,6 +74,7 @@ class ProductSeeder extends Seeder
                 'fats' => 0.4
             ],
             [
+                'user_id' => 1,
                 'name' => 'Quinoa',
                 'description' => 'Whole grain superfood with complete protein profile and multiple nutrients',
                 'price' => 210.75,
@@ -83,6 +86,7 @@ class ProductSeeder extends Seeder
                 'fats' => 6.1
             ],
             [
+                'user_id' => 1,
                 'name' => 'Almond Butter',
                 'description' => 'Smooth, natural almond butter without added sugars or preservatives',
                 'price' => 320.00,
@@ -94,6 +98,7 @@ class ProductSeeder extends Seeder
                 'fats' => 54.0
             ],
             [
+                'user_id' => 1,
                 'name' => 'Eggs (Large)',
                 'description' => 'Free-range organic chicken eggs, rich in protein and essential nutrients',
                 'price' => 150.25,
@@ -105,6 +110,7 @@ class ProductSeeder extends Seeder
                 'fats' => 9.5
             ],
             [
+                'user_id' => 1,
                 'name' => 'Avocado',
                 'description' => 'Ripe, creamy avocado with healthy monounsaturated fats',
                 'price' => 135.50,
@@ -116,6 +122,7 @@ class ProductSeeder extends Seeder
                 'fats' => 14.7
             ],
             [
+                'user_id' => 1,
                 'name' => 'Sweet Potato',
                 'description' => 'Nutrient-rich orange sweet potato, high in vitamin A and fiber',
                 'price' => 80.75,
@@ -128,9 +135,8 @@ class ProductSeeder extends Seeder
             ]
         ];
 
-        // Create products with the first category
         foreach ($products as $productData) {
-            Product::create(array_merge($productData, ['category_id' => $category->id]));
+            Product::create($productData);
         }
     }
 }
