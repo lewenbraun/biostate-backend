@@ -25,6 +25,14 @@ class NutrientsFormatService
                 $dailyMeals = $mealsForPeriod->filter(function ($meal) use ($iterableDate) {
                     return $meal->date->isSameDay($iterableDate);
                 });
+                if ($dailyMeals->isEmpty()) {
+                    $daysData[] = [
+                        'date' => $iterableDate->format('d.m'),
+                        'total' => 0,
+                    ];
+                    $iterableDate->addDay();
+                    continue;
+                }
 
                 $dailyTotal = $this->calculateDailyNutrientTotal($nutrient, $dailyMeals);
 
@@ -46,7 +54,7 @@ class NutrientsFormatService
     {
         $sumMeals = $meals->sum(function ($meal) use ($nutrient) {
             return $meal->products->sum(function ($product) use ($nutrient) {
-                $portionWeight = $product->pivot->weight_product / 100 * $product->pivot->count;
+                $portionWeight = $product->weight_product / $product->weight_for_features * $product->pivot->count;
                 return $product->$nutrient * $portionWeight;
             });
         });
