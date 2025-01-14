@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 class ProductFeaturesDTO
 {
     public $weight_for_features;
+    public $weight;
     public $calories;
     public $proteins;
     public $carbs;
@@ -16,6 +17,7 @@ class ProductFeaturesDTO
     {
         $dto = new self();
         $dto->weight_for_features = $request->weight_for_features;
+        $dto->weight = $request->weight;
         $dto->calories = $request->calories;
         $dto->proteins = $request->proteins;
         $dto->carbs = $request->carbs;
@@ -27,6 +29,7 @@ class ProductFeaturesDTO
     {
         $dto = new self();
         $dto->weight_for_features = (int) $resource->pivot->weight_product;
+        $dto->weight = $resource->weight;
         $dto->calories = $resource->calories;
         $dto->proteins = $resource->proteins;
         $dto->carbs = $resource->carbs;
