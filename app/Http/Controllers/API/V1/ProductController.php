@@ -33,7 +33,7 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    public function store(ProductCreateRequest $request): JsonResponse
+    public function create(ProductCreateRequest $request): JsonResponse
     {
         try {
             $formattedProductData = $this->productService->getFormattedProductData($request);
