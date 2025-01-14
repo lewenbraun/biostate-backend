@@ -107,6 +107,7 @@ class MealController extends Controller
         try {
             $mealProduct = MealProduct::where('meal_id', $request->meal_id)
                 ->where('product_id', $request->product_id)
+                ->where('weight_product', $request->weight_product)
                 ->first();
             $mealProduct->weight_product = $request->changed_weight;
             $mealProduct->save();

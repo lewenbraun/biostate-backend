@@ -10,6 +10,8 @@ use App\Http\DTO\Meal\Product\FormattedProductFeaturesDTO;
 
 final class ProductService
 {
+    private const WEIGHT_FACTOR_BASE = 100;
+
     public function getFormattedProductData(Request $request)
     {
         $productData = [
@@ -65,7 +67,7 @@ final class ProductService
 
     public function formatFeatures(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
     {
-        $factor = $productFeatures->weight / $productFeatures->weight_for_features;
+        $factor = $productFeatures->weight ?? self::WEIGHT_FACTOR_BASE / $productFeatures->weight_for_features;
 
         $formattedFeatures = new FormattedProductFeaturesDTO();
 
