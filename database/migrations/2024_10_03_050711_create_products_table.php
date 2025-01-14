@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->float('price')->nullable();
-            $table->float('weight_default')->nullable();
+            $table->float('weight')->nullable();
             $table->float('weight_for_features')->nullable();
             $table->float('calories')->nullable();
             $table->float('proteins')->nullable();

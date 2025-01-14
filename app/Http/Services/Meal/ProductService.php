@@ -19,7 +19,7 @@ final class ProductService
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'weight_default' => $request->weight_default,
+            'weight' => $request->weight,
             'weight_for_features' => $request->weight_for_features,
         ];
 
