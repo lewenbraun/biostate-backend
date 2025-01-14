@@ -16,7 +16,6 @@ class NutrientsFormatService
         $endDate = Carbon::parse($endDate);
 
         $mealsForPeriod = $this->getMealsForPeriod($user, $startDate, $endDate, $nutrients);
-
         $data = [];
         foreach ($nutrients as $nutrient) {
             $iterableDate = $startDate->copy();
@@ -47,7 +46,7 @@ class NutrientsFormatService
     {
         $sumMeals = $meals->sum(function ($meal) use ($nutrient) {
             return $meal->products->sum(function ($product) use ($nutrient) {
-                $portionWeight = $product->pivot->weight_product / $product->weight_for_features;
+                $portionWeight = $product->pivot->weight_product / 100 * $product->pivot->count;
                 return $product->$nutrient * $portionWeight;
             });
         });

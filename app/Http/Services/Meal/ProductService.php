@@ -15,21 +15,23 @@ final class ProductService
     public function getFormattedProductData(Request $request)
     {
         $productData = [
+            'user_id' => auth()->id(),
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'weight_default' => $request->weight_default,
             'weight_for_features' => $request->weight_for_features,
-            'image' => $request->image,
         ];
 
         if ($request->weight_for_features) {
             $productFeatures = ProductFeaturesDTO::fromRequest($request);
             $formattedFeatures = $this->formatFeatures($productFeatures);
             $formattedProductData = array_merge($productData, $formattedFeatures->toArray());
+
+            return $formattedProductData;
         }
 
-        return $formattedProductData;
+        return $productData;
     }
 
     public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal)
