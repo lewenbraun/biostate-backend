@@ -67,8 +67,7 @@ final class ProductService
 
     public function formatFeatures(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
     {
-        $factor = $productFeatures->weight ?? self::WEIGHT_FACTOR_BASE / $productFeatures->weight_for_features;
-
+        $factor = ($productFeatures->weight ?? self::WEIGHT_FACTOR_BASE) / $productFeatures->weight_for_features;
         $formattedFeatures = new FormattedProductFeaturesDTO();
 
         $formattedFeatures->calories = self::calculateQuantity($productFeatures->calories, $factor);
