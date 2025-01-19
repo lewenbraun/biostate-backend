@@ -24,6 +24,7 @@ class ProductMealResource extends JsonResource
             'description' => $this->description,
             'price' => $this->price,
             'weight' => $weight,
+            'weight_for_features' => $this->weight_for_features,
             'image' => $this->image,
             'calories' => $this->calories,
             'proteins' => $this->proteins,

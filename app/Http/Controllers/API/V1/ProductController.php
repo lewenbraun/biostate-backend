@@ -20,7 +20,7 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = Product::orderBy('created_at', 'asc')->get();
+        $products = Product::orderBy('created_at', 'asc')->where('user_id', auth()->id())->get();
         return response()->json($products);
     }
 
@@ -33,7 +33,7 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    public function store(ProductCreateRequest $request): JsonResponse
+    public function create(ProductCreateRequest $request): JsonResponse
     {
         try {
             $formattedProductData = $this->productService->getFormattedProductData($request);

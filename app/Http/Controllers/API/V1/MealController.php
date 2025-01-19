@@ -59,8 +59,10 @@ class MealController extends Controller
     public function deleteProduct(Request $request)
     {
         try {
-            $meal = Meal::findOrFail($request->meal_id);
-            $meal->products()->detach($request->product_id);
+            MealProduct::where('meal_id', $request->meal_id)
+                ->where('product_id', $request->product_id)
+                ->where('weight_product', $request->weight_product)
+                ->delete();
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -105,6 +107,7 @@ class MealController extends Controller
         try {
             $mealProduct = MealProduct::where('meal_id', $request->meal_id)
                 ->where('product_id', $request->product_id)
+                ->where('weight_product', $request->weight_product)
                 ->first();
             $mealProduct->weight_product = $request->changed_weight;
             $mealProduct->save();

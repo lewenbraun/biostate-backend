@@ -19,7 +19,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'price' => $this->price,
-            'weight_default' => $this->weight_default,
+            'weight' => $this->weight,
             'weight_for_features' => $this->weight_for_features,
             'image' => $this->image,
             'calories' => $this->calories,
@@ -27,6 +27,8 @@ class ProductResource extends JsonResource
             'carbs' => $this->carbs,
             'fats' => $this->fats,
             'count' => $this->pivot->count,
+            'is_public' => $this->is_public,
+            'is_alcohol' => $this->is_alcohol,
         ];
     }
 }

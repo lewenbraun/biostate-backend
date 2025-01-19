@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,17 +13,18 @@ return new class () extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class);
             $table->string('name');
             $table->text('description')->nullable();
             $table->float('price')->nullable();
-            $table->float('weight_default')->nullable();
+            $table->float('weight')->nullable();
             $table->float('weight_for_features')->nullable();
-            $table->string('image')->nullable();
-            $table->foreignIdFor(Category::class)->nullable();
             $table->float('calories')->nullable();
             $table->float('proteins')->nullable();
             $table->float('carbs')->nullable();
             $table->float('fats')->nullable();
+            $table->boolean('is_alcohol')->default(false);
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
         });
     }

@@ -15,22 +15,25 @@ final class ProductService
     public function getFormattedProductData(Request $request)
     {
         $productData = [
+            'user_id' => auth()->id(),
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'weight_default' => $request->weight_default,
+            'weight' => $request->weight,
             'weight_for_features' => $request->weight_for_features,
-            'category_id' => $request->category_id,
-            'image' => $request->image,
+            'is_public' => $request->is_public,
+            'is_alcohol' => $request->is_alcohol,
         ];
 
         if ($request->weight_for_features) {
             $productFeatures = ProductFeaturesDTO::fromRequest($request);
             $formattedFeatures = $this->formatFeatures($productFeatures);
             $formattedProductData = array_merge($productData, $formattedFeatures->toArray());
+
+            return $formattedProductData;
         }
 
-        return $formattedProductData;
+        return $productData;
     }
 
     public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal)
@@ -66,8 +69,7 @@ final class ProductService
 
     public function formatFeatures(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO
     {
-        $factor = self::WEIGHT_FACTOR_BASE / $productFeatures->weight_for_features;
-
+        $factor = ($productFeatures->weight ?? self::WEIGHT_FACTOR_BASE) / $productFeatures->weight_for_features;
         $formattedFeatures = new FormattedProductFeaturesDTO();
 
         $formattedFeatures->calories = self::calculateQuantity($productFeatures->calories, $factor);
