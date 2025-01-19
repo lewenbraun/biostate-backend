@@ -21,6 +21,8 @@ final class ProductService
             'price' => $request->price,
             'weight' => $request->weight,
             'weight_for_features' => $request->weight_for_features,
+            'is_public' => $request->is_public,
+            'is_alcohol' => $request->is_alcohol,
         ];
 
         if ($request->weight_for_features) {

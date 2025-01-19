@@ -27,6 +27,8 @@ class ProductResource extends JsonResource
             'carbs' => $this->carbs,
             'fats' => $this->fats,
             'count' => $this->pivot->count,
+            'is_public' => $this->is_public,
+            'is_alcohol' => $this->is_alcohol,
         ];
     }
 }
