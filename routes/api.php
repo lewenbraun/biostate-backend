@@ -8,28 +8,13 @@ use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
 use App\Http\Controllers\API\V1\StatisticsController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
+    Route::group(['prefix' => 'user'], function () {
+        Route::post('/update', [UserController::class, 'update']);
+        Route::get('/max-nutrients', [UserController::class, 'maxNutrients']);
+        Route::get('/profile-data', [UserController::class, 'profileData']);
     });
-    Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::post('/user/update', [UserController::class, 'update']);
     Route::group(['prefix' => 'daily-meal'], function () {
         Route::get('/', [MealController::class, 'show']);
         Route::post('/product/add', [MealController::class, 'addProductIntoMeal']);
@@ -57,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => 'statistics'], function () {
         Route::get('/sum-nutrients-for-period-date', [StatisticsController::class, 'sumNutrientsForPeriodDate']);
     });
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
