@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Meal;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Statistics\NutrientsFormatService;
+use App\Http\Requests\General\Authorize\RequiredDateRequest;
+use App\Http\Requests\Statistics\NutruentsForPeriodDateRequest;
 
 class StatisticsController extends Controller
 {
@@ -17,7 +18,16 @@ class StatisticsController extends Controller
         $this->nutrientsFormatService = $nutrientsFormatService;
     }
 
-    public function sumNutrientsForPeriodDate(Request $request): JsonResponse
+    public function statisticsPerDay(RequiredDateRequest $request): JsonResponse
+    {
+        $meals = Meal::where('date', $request->date)
+            ->where('user_id', auth()->id())
+            ->get();
+
+        return $meals;
+    }
+
+    public function sumNutrientsForPeriodDate(NutruentsForPeriodDateRequest $request): JsonResponse
     {
         $startDate = $request->start_date;
         $endDate = $request->end_date;

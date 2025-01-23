@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -30,7 +30,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request): JsonResponse
+    public function update(UserUpdateRequest $request): JsonResponse
     {
         $user = auth()->user();
 

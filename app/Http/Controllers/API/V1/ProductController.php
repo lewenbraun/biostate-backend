@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Meal\ProductService;
+use App\Http\Requests\General\RequiredIdRequest;
 use App\Http\Requests\Product\ProductCreateRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
@@ -20,7 +21,10 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = Product::orderBy('created_at', 'asc')->where('user_id', auth()->id())->get();
+        $products = Product::orderBy('created_at', 'asc')
+            ->where('user_id', auth()->id())
+            ->get();
+
         return response()->json($products);
     }
 
@@ -45,7 +49,7 @@ class ProductController extends Controller
         return response()->json($product, 200);
     }
 
-    public function update(Request $request): JsonResponse
+    public function update(ProductUpdateRequest $request): JsonResponse
     {
         try {
             $formattedProductData = $this->productService->getFormattedProductData($request);
@@ -58,10 +62,10 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(RequiredIdRequest $request): JsonResponse
     {
         try {
-            $product = Product::findOrFail($request->product_id);
+            $product = Product::findOrFail($request->id);
             $product->delete();
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

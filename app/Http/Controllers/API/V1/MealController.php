@@ -8,7 +8,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Meal\MealResource;
 use App\Http\Services\Meal\ProductService;
+use App\Http\Requests\Meal\CreateMealRequest;
+use App\Http\Requests\General\RequiredIdRequest;
+use App\Http\Requests\Meal\DeleteProductRequest;
 use App\Http\Requests\Meal\AddProductToMealRequest;
+use App\Http\Requests\Meal\ChangeCountProductRequest;
+use App\Http\Requests\Meal\UpdateWeightProductRequest;
+use App\Http\Requests\General\Authorize\RequiredDateRequest;
 
 class MealController extends Controller
 {
@@ -19,7 +25,7 @@ class MealController extends Controller
         $this->productService = $productService;
     }
 
-    public function createMeal(Request $request)
+    public function createMeal(CreateMealRequest $request)
     {
         $meal = Meal::create([
            'date' => $request->date,
@@ -30,9 +36,9 @@ class MealController extends Controller
         return $meal;
     }
 
-    public function deleteMeal(Request $request)
+    public function deleteMeal(RequiredIdRequest $request)
     {
-        $meal = Meal::findOrFail($request->meal_id)->delete();
+        $meal = Meal::findOrFail($request->id)->delete();
 
         return $meal;
     }
@@ -47,7 +53,7 @@ class MealController extends Controller
         $this->productService->addProductOrIncreaseCountIntoMeal($request->product_id, $request->weight, $meal);
     }
 
-    public function show(Request $request)
+    public function show(RequiredDateRequest $request)
     {
         $meal = Meal::where('date', $request->date)
             ->where('user_id', auth()->id())
@@ -56,7 +62,7 @@ class MealController extends Controller
         return MealResource::collection($meal);
     }
 
-    public function deleteProduct(Request $request)
+    public function deleteProduct(DeleteProductRequest $request)
     {
         try {
             MealProduct::where('meal_id', $request->meal_id)
@@ -71,7 +77,7 @@ class MealController extends Controller
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-    public function increaseCountProduct(Request $request)
+    public function increaseCountProduct(ChangeCountProductRequest $request)
     {
         try {
             $meal = Meal::findOrFail($request->meal_id);
@@ -84,7 +90,7 @@ class MealController extends Controller
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-    public function decreaseCountProduct(Request $request)
+    public function decreaseCountProduct(ChangeCountProductRequest $request)
     {
         try {
             $meal = Meal::findOrFail($request->meal_id);
@@ -102,7 +108,7 @@ class MealController extends Controller
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-    public function updateWeightProduct(Request $request)
+    public function updateWeightProduct(UpdateWeightProductRequest $request)
     {
         try {
             $mealProduct = MealProduct::where('meal_id', $request->meal_id)
@@ -117,14 +123,5 @@ class MealController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    }
-
-    public function statisticsPerDay(Request $request)
-    {
-        $meals = Meal::where('date', $request->date)
-            ->where('user_id', auth()->id())
-            ->get();
-
-        return $meals;
     }
 }
