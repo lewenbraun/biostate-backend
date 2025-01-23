@@ -4,16 +4,15 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Models\Meal;
 use App\Models\MealProduct;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Meal\MealResource;
 use App\Http\Services\Meal\ProductService;
 use App\Http\Requests\Meal\CreateMealRequest;
-use App\Http\Requests\General\RequiredIdRequest;
 use App\Http\Requests\Meal\DeleteProductRequest;
 use App\Http\Requests\Meal\AddProductToMealRequest;
 use App\Http\Requests\Meal\ChangeCountProductRequest;
 use App\Http\Requests\Meal\UpdateWeightProductRequest;
+use App\Http\Requests\General\Authorize\RequiredIdRequest;
 use App\Http\Requests\General\Authorize\RequiredDateRequest;
 
 class MealController extends Controller

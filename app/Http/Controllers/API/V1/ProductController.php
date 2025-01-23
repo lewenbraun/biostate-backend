@@ -6,9 +6,9 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Meal\ProductService;
-use App\Http\Requests\General\RequiredIdRequest;
 use App\Http\Requests\Product\ProductCreateRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
+use App\Http\Requests\General\Authorize\RequiredIdRequest;
 
 class ProductController extends Controller
 {
