@@ -20,8 +20,6 @@ class MealRepository
             ->where('id', auth()->id())
             ->first();
 
-        
-
         return $parameters;
     }
 }

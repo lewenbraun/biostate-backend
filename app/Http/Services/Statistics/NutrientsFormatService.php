@@ -3,7 +3,6 @@
 namespace App\Http\Services\Statistics;
 
 use Carbon\Carbon;
-use App\Models\Meal;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
