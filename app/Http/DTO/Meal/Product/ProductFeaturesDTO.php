@@ -13,7 +13,7 @@ class ProductFeaturesDTO
     public $carbs;
     public $fats;
 
-    public static function fromRequest(Request $request)
+    public static function fromRequest(Request $request): self
     {
         $dto = new self();
         $dto->weight_for_features = $request->weight_for_features;
@@ -25,7 +25,7 @@ class ProductFeaturesDTO
         return $dto;
     }
 
-    public static function fromResource($resource)
+    public static function fromResource($resource): self
     {
         $dto = new self();
         $dto->weight_for_features = (int) $resource->pivot->weight_product;

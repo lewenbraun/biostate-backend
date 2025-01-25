@@ -12,7 +12,7 @@ final class ProductService
 {
     private const WEIGHT_FACTOR_BASE = 100;
 
-    public function getFormattedProductData(Request $request)
+    public function getFormattedProductData(Request $request): array
     {
         $productData = [
             'user_id' => auth()->id(),
@@ -36,22 +36,18 @@ final class ProductService
         return $productData;
     }
 
-    public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal)
+    public function addProductOrIncreaseCountIntoMeal(int $product_id, float $weight, Meal $meal): void
     {
-        try {
-            $product = $meal->products->where('id', $product_id)->where('pivot.weight_product', $weight)->first();
+        $product = $meal->products->where('id', $product_id)->where('pivot.weight_product', $weight)->first();
 
-            if ($product) {
-                $this->increaseCountProduct($product);
-            } else {
-                MealProduct::create([
-                    'product_id' => $product_id,
-                    'meal_id' => $meal->id,
-                    'weight_product' => $weight,
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+        if ($product) {
+            $this->increaseCountProduct($product);
+        } else {
+            MealProduct::create([
+                'product_id' => $product_id,
+                'meal_id' => $meal->id,
+                'weight_product' => $weight,
+            ]);
         }
     }
 
