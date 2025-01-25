@@ -22,30 +22,20 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        try {
-            $products = Product::orderBy('created_at', 'asc')
-                ->where('user_id', auth()->id())
-                ->get();
+        $products = Product::orderBy('created_at', 'asc')
+            ->where('user_id', auth()->id())
+            ->get();
 
-            return response()->json($products);
-        } catch (\Exception $e) {
-            Log::error('Error fetching products: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while fetching products.'], 500);
-        }
+        return response()->json($products);
     }
 
     public function search(string $name): JsonResponse
     {
-        try {
-            $products = Product::where('name', 'like', '%' . $name . '%')
-                ->orWhere('description', 'like', '%' . $name . '%')
-                ->get();
+        $products = Product::where('name', 'like', '%' . $name . '%')
+            ->orWhere('description', 'like', '%' . $name . '%')
+            ->get();
 
-            return response()->json($products);
-        } catch (\Exception $e) {
-            Log::error('Error searching products: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while searching for products.'], 500);
-        }
+        return response()->json($products);
     }
 
     public function create(ProductCreateRequest $request): JsonResponse
@@ -77,24 +67,14 @@ class ProductController extends Controller
 
     public function delete(RequiredIdRequest $request): JsonResponse
     {
-        try {
-            $product = Product::findOrFail($request->id);
-            $product->delete();
+        $product = Product::findOrFail($request->id);
+        $product->delete();
 
-            return response()->json(['message' => 'Product deleted successfully']);
-        } catch (\Exception $e) {
-            Log::error('Error deleting product: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while deleting the product.'], 500);
-        }
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 
     public function show(Product $product): JsonResponse
     {
-        try {
-            return response()->json($product);
-        } catch (\Exception $e) {
-            Log::error('Error fetching product details: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while fetching the product details.'], 500);
-        }
+        return response()->json($product);
     }
 }

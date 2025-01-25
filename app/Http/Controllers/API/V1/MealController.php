@@ -29,28 +29,20 @@ class MealController extends Controller
 
     public function createMeal(CreateMealRequest $request): JsonResponse
     {
-        try {
-            $meal = Meal::create([
-                'date' => $request->date,
-                'meal_order' => $request->meal_order,
-                'user_id' => auth()->id(),
-            ]);
-            return response()->json($meal);
-        } catch (\Exception $e) {
-            Log::error('Error creating meal: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while creating the meal.'], 500);
-        }
+        $meal = Meal::create([
+            'date' => $request->date,
+            'meal_order' => $request->meal_order,
+            'user_id' => auth()->id(),
+        ]);
+
+        return response()->json($meal);
     }
 
     public function deleteMeal(RequiredIdRequest $request): JsonResponse
     {
-        try {
-            $meal = Meal::findOrFail($request->id)->delete();
-            return response()->json($meal);
-        } catch (\Exception $e) {
-            Log::error('Error deleting meal: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while deleting the meal.'], 500);
-        }
+        $meal = Meal::findOrFail($request->id)->delete();
+
+        return response()->json($meal);
     }
 
     public function addProductIntoMeal(AddProductToMealRequest $request): JsonResponse
@@ -71,31 +63,21 @@ class MealController extends Controller
 
     public function show(RequiredDateRequest $request): AnonymousResourceCollection
     {
-        try {
-            $meal = Meal::where('date', $request->date)
-                ->where('user_id', auth()->id())
-                ->get();
+        $meal = Meal::where('date', $request->date)
+            ->where('user_id', auth()->id())
+            ->get();
 
-            return MealResource::collection($meal);
-        } catch (\Exception $e) {
-            Log::error('Error fetching meals: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while fetching meals.'], 500);
-        }
+        return MealResource::collection($meal);
     }
 
     public function deleteProduct(DeleteProductRequest $request): JsonResponse
     {
-        try {
-            MealProduct::where('meal_id', $request->meal_id)
-                ->where('product_id', $request->product_id)
-                ->where('weight_product', $request->weight_product)
-                ->delete();
+        MealProduct::where('meal_id', $request->meal_id)
+            ->where('product_id', $request->product_id)
+            ->where('weight_product', $request->weight_product)
+            ->delete();
 
-            return response()->json(['message' => 'Product deleted successfully']);
-        } catch (\Exception $e) {
-            Log::error('Error deleting product: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while deleting the product.'], 500);
-        }
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 
     public function increaseCountProduct(ChangeCountProductRequest $request): JsonResponse
@@ -133,19 +115,14 @@ class MealController extends Controller
 
     public function updateWeightProduct(UpdateWeightProductRequest $request): JsonResponse
     {
-        try {
-            $mealProduct = MealProduct::where('meal_id', $request->meal_id)
-                ->where('product_id', $request->product_id)
-                ->where('weight_product', $request->weight_product)
-                ->first();
+        $mealProduct = MealProduct::where('meal_id', $request->meal_id)
+            ->where('product_id', $request->product_id)
+            ->where('weight_product', $request->weight_product)
+            ->first();
 
-            $mealProduct->weight_product = $request->changed_weight;
-            $mealProduct->save();
+        $mealProduct->weight_product = $request->changed_weight;
+        $mealProduct->save();
 
-            return response()->json(['message' => 'Product weight updated successfully.']);
-        } catch (\Exception $e) {
-            Log::error('Error updating product weight: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while updating product weight.'], 500);
-        }
+        return response()->json(['message' => 'Product weight updated successfully.']);
     }
 }
