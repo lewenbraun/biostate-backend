@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Meal\ProductService;
 use App\Http\Requests\Product\ProductCreateRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
+use App\Http\Requests\General\Authorize\RequiredIdRequest;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -20,7 +22,10 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = Product::orderBy('created_at', 'asc')->where('user_id', auth()->id())->get();
+        $products = Product::orderBy('created_at', 'asc')
+            ->where('user_id', auth()->id())
+            ->get();
+
         return response()->json($products);
     }
 
@@ -38,34 +43,33 @@ class ProductController extends Controller
         try {
             $formattedProductData = $this->productService->getFormattedProductData($request);
             $product = Product::create($formattedProductData);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
 
-        return response()->json($product, 200);
+            return response()->json($product, 200);
+        } catch (\Exception $e) {
+            Log::error('Error creating product: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while creating the product.'], 500);
+        }
     }
 
-    public function update(Request $request): JsonResponse
+    public function update(ProductUpdateRequest $request): JsonResponse
     {
         try {
             $formattedProductData = $this->productService->getFormattedProductData($request);
             $product = Product::findOrFail($request->id);
             $product->update($formattedProductData);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
 
-        return response()->json($product);
+            return response()->json($product);
+        } catch (\Exception $e) {
+            Log::error('Error updating product: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while updating the product.'], 500);
+        }
     }
 
-    public function delete(Request $request): JsonResponse
+    public function delete(RequiredIdRequest $request): JsonResponse
     {
-        try {
-            $product = Product::findOrFail($request->product_id);
-            $product->delete();
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $product = Product::findOrFail($request->id);
+        $product->delete();
+
         return response()->json(['message' => 'Product deleted successfully']);
     }
 

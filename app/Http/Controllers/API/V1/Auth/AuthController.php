@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +51,6 @@ class AuthController extends Controller
         $token = $user->createToken('main')->plainTextToken;
 
         return response([
-            'user' => $user,
             'token' => $token
         ]);
     }

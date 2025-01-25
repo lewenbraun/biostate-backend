@@ -4,11 +4,19 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Models\Meal;
 use App\Models\MealProduct;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Meal\MealResource;
 use App\Http\Services\Meal\ProductService;
+use App\Http\Requests\Meal\CreateMealRequest;
+use App\Http\Requests\Meal\DeleteProductRequest;
 use App\Http\Requests\Meal\AddProductToMealRequest;
+use App\Http\Requests\Meal\ChangeCountProductRequest;
+use App\Http\Requests\Meal\UpdateWeightProductRequest;
+use App\Http\Requests\General\Authorize\RequiredIdRequest;
+use App\Http\Requests\General\Authorize\RequiredDateRequest;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Log;
 
 class MealController extends Controller
 {
@@ -19,35 +27,41 @@ class MealController extends Controller
         $this->productService = $productService;
     }
 
-    public function createMeal(Request $request)
+    public function createMeal(CreateMealRequest $request): JsonResponse
     {
         $meal = Meal::create([
-           'date' => $request->date,
-           'meal_order' => $request->meal_order,
-           'user_id' => auth()->id(),
+            'date' => $request->date,
+            'meal_order' => $request->meal_order,
+            'user_id' => auth()->id(),
         ]);
 
-        return $meal;
+        return response()->json($meal);
     }
 
-    public function deleteMeal(Request $request)
+    public function deleteMeal(RequiredIdRequest $request): JsonResponse
     {
-        $meal = Meal::findOrFail($request->meal_id)->delete();
+        $meal = Meal::findOrFail($request->id)->delete();
 
-        return $meal;
+        return response()->json($meal);
     }
 
-    public function addProductIntoMeal(AddProductToMealRequest $request)
+    public function addProductIntoMeal(AddProductToMealRequest $request): JsonResponse
     {
-        $meal = Meal::with('products')
-            ->where('date', $request->date)
-            ->where('meal_order', $request->meal_order)
-            ->first();
+        try {
+            $meal = Meal::with('products')
+                ->where('date', $request->date)
+                ->where('meal_order', $request->meal_order)
+                ->first();
 
-        $this->productService->addProductOrIncreaseCountIntoMeal($request->product_id, $request->weight, $meal);
+            $this->productService->addProductOrIncreaseCountIntoMeal($request->product_id, $request->weight, $meal);
+            return response()->json(['message' => 'Product added successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Error adding product to meal: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while adding the product.'], 500);
+        }
     }
 
-    public function show(Request $request)
+    public function show(RequiredDateRequest $request): AnonymousResourceCollection
     {
         $meal = Meal::where('date', $request->date)
             ->where('user_id', auth()->id())
@@ -56,35 +70,31 @@ class MealController extends Controller
         return MealResource::collection($meal);
     }
 
-    public function deleteProduct(Request $request)
+    public function deleteProduct(DeleteProductRequest $request): JsonResponse
     {
-        try {
-            MealProduct::where('meal_id', $request->meal_id)
-                ->where('product_id', $request->product_id)
-                ->where('weight_product', $request->weight_product)
-                ->delete();
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        MealProduct::where('meal_id', $request->meal_id)
+            ->where('product_id', $request->product_id)
+            ->where('weight_product', $request->weight_product)
+            ->delete();
 
         return response()->json(['message' => 'Product deleted successfully']);
     }
 
-    public function increaseCountProduct(Request $request)
+    public function increaseCountProduct(ChangeCountProductRequest $request): JsonResponse
     {
         try {
             $meal = Meal::findOrFail($request->meal_id);
             $product = $meal->products->findOrFail($request->product_id);
             $this->productService->increaseCountProduct($product);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
 
-        return response()->json(['message' => 'Product deleted successfully']);
+            return response()->json(['message' => 'Product count increased successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Error increasing product count: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while increasing product count.'], 500);
+        }
     }
 
-    public function decreaseCountProduct(Request $request)
+    public function decreaseCountProduct(ChangeCountProductRequest $request): JsonResponse
     {
         try {
             $meal = Meal::findOrFail($request->meal_id);
@@ -95,36 +105,24 @@ class MealController extends Controller
             } else {
                 $this->productService->decreaseCountProduct($product);
             }
+
+            return response()->json(['message' => 'Product count decreased successfully.']);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-
-        return response()->json(['message' => 'Product deleted successfully']);
-    }
-
-    public function updateWeightProduct(Request $request)
-    {
-        try {
-            $mealProduct = MealProduct::where('meal_id', $request->meal_id)
-                ->where('product_id', $request->product_id)
-                ->where('weight_product', $request->weight_product)
-                ->first();
-            $mealProduct->weight_product = $request->changed_weight;
-            $mealProduct->save();
-
-            return response()->json(['message' => 'Product changed weight successfully']);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            Log::error('Error decreasing product count: ' . $e->getMessage());
+            return response()->json(['message' => 'An error occurred while decreasing product count.'], 500);
         }
     }
 
-    public function statisticsPerDay(Request $request)
+    public function updateWeightProduct(UpdateWeightProductRequest $request): JsonResponse
     {
-        $meals = Meal::where('date', $request->date)
-            ->where('user_id', auth()->id())
-            ->get();
+        $mealProduct = MealProduct::where('meal_id', $request->meal_id)
+            ->where('product_id', $request->product_id)
+            ->where('weight_product', $request->weight_product)
+            ->first();
 
-        return $meals;
+        $mealProduct->weight_product = $request->changed_weight;
+        $mealProduct->save();
+
+        return response()->json(['message' => 'Product weight updated successfully.']);
     }
 }
