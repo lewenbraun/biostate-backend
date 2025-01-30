@@ -1,41 +1,41 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
-# Установка зависимостей и PHP расширений
+# Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    libldap2-dev \
-    locales \
+    libpq-dev \
     zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
     unzip \
     git \
     curl \
-    libpq-dev
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_pgsql gd exif pcntl opcache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql gd exif pcntl ldap
-
-# Установка Composer
+# Install Composer (multi-stage build)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Настройка рабочей директории
 WORKDIR /var/www
 
-# Копирование файлов приложения
-COPY . /var/www
+# Copy dependencies
+COPY composer.* ./
+RUN composer install --no-dev --no-scripts --no-autoloader
 
-# Установка зависимостей приложения
-RUN composer install --ignore-platform-req=ext-ldap
+# Copy application
+COPY . .
+RUN composer dump-autoload --optimize
 
-# Настройка прав
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www
+# Permissions handling
+RUN mkdir -p /var/www/storage/logs \
+    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache \
+    && find /var/www/storage -type d -exec chmod 2775 {} \; \
+    && find /var/www/storage -type f -exec chmod 664 {} \;
 
-# Копирование пользовательских конфигураций PHP
+# PHP configuration
 COPY .docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 EXPOSE 9000
