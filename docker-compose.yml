@@ -18,7 +18,7 @@ services:
             - wte-db
 
     wte-nginx:
-        image: nginx:latest
+        image: nginx:stable-alpine
         container_name: wte-nginx
         restart: unless-stopped
         ports:

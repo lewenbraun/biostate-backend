@@ -1,19 +1,21 @@
-FROM php:8.4-fpm
+FROM php:8.4-fpm-alpine
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
+RUN apk --no-cache add \
+    autoconf \
+    gcc \
+    g++ \
+    make \
     libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libpq-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    postgresql-dev \
     zip \
     unzip \
     git \
     curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql gd exif pcntl opcache \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install pdo pdo_pgsql gd exif pcntl opcache
 
 # Install Composer (multi-stage build)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -24,18 +26,18 @@ WORKDIR /var/www
 COPY composer.* ./
 RUN composer install --no-dev --no-scripts --no-autoloader
 
-# Copy application
+# Copy application files
 COPY . .
 RUN composer dump-autoload --optimize
 
-# Permissions handling
+# Set permissions for storage and cache directories
 RUN mkdir -p /var/www/storage/logs \
     && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
     && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache \
     && find /var/www/storage -type d -exec chmod 2775 {} \; \
     && find /var/www/storage -type f -exec chmod 664 {} \;
 
-# PHP configuration
+# Copy PHP configuration
 COPY .docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 EXPOSE 9000
