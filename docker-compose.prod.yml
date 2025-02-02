@@ -58,7 +58,7 @@ services:
   wte-frontend:
     build:
       context: ../wte-frontend
-      dockerfile: docker/dockerfiles/prod.Dockerfile
+      dockerfile: .docker/dockerfiles/prod.Dockerfile
     container_name: wte-frontend
     restart: unless-stopped
     ports:
