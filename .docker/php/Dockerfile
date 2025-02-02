@@ -6,6 +6,7 @@ RUN apk --no-cache add \
     gcc \
     g++ \
     make \
+    nano \
     libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
