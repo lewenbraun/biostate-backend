@@ -35,12 +35,12 @@ class UserController extends Controller
         $user = auth()->user();
 
         $user->update([
-            'name' => $request->name,
-            'weight' => $request->weight,
-            'calories' => $request->calories,
-            'proteins' => $request->proteins,
-            'carbs' => $request->carbs,
-            'fats' => $request->fats,
+            'name' => $request->profileData['name'],
+            'weight' => $request->profileData['weight'],
+            'calories' => $request->maxNutrients['calories'],
+            'proteins' => $request->maxNutrients['proteins'],
+            'carbs' => $request->maxNutrients['carbs'],
+            'fats' => $request->maxNutrients['fats'],
         ]);
         return response()->json($user);
     }

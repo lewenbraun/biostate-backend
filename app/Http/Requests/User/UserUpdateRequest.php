@@ -22,12 +22,12 @@ class UserUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|required',
-            'weight' => 'nullable|decimal:0,3',
-            'calories' => 'nullable|integer',
-            'proteins' => 'nullable|integer',
-            'carbs' => 'nullable|integer',
-            'fats' => 'nullable|integer',
+            'profileData.name' => 'string|required',
+            'profileData.weight' => 'nullable|decimal:0,3',
+            'maxNutrients.calories' => 'nullable|integer',
+            'maxNutrients.proteins' => 'nullable|integer',
+            'maxNutrients.carbs' => 'nullable|integer',
+            'maxNutrients.fats' => 'nullable|integer',
         ];
     }
 }
