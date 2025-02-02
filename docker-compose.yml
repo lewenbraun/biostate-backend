@@ -60,6 +60,8 @@ services:
       context: ../wte-frontend
       dockerfile: .docker/dockerfiles/dev.Dockerfile
     container_name: wte-frontend-dev
+    volumes:
+      - ../wte-frontend:/app
     restart: unless-stopped
     ports:
       - "80:9000"
