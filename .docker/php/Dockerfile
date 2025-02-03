@@ -2,21 +2,12 @@ FROM php:8.4-fpm-alpine
 
 # Install dependencies
 RUN apk --no-cache add \
-    autoconf \
-    gcc \
-    g++ \
-    make \
-    nano \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    postgresql-dev \
+    curl \
     zip \
     unzip \
+    postgresql-dev \
     git \
-    curl \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql gd exif pcntl opcache
+    && docker-php-ext-install pdo pdo_pgsql opcache
 
 # Install Composer (multi-stage build)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -32,11 +23,8 @@ COPY . .
 RUN composer dump-autoload --optimize
 
 # Set permissions for storage and cache directories
-RUN mkdir -p /var/www/storage/logs \
-    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache \
-    && find /var/www/storage -type d -exec chmod 2775 {} \; \
-    && find /var/www/storage -type f -exec chmod 664 {} \;
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
 
 # Copy PHP configuration
 COPY .docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
