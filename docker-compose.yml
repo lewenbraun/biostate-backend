@@ -3,7 +3,7 @@ services:
   wte-backend:
     build:
       context: .
-      dockerfile: .docker/php/Dockerfile
+      dockerfile: .docker/php/dev.Dockerfile
     container_name: wte-backend
     restart: unless-stopped
     tty: true
