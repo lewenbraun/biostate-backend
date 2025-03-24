@@ -3,7 +3,7 @@ services:
   bs-backend:
     build:
       context: .
-      dockerfile: .docker/php/prod-alpine.Dockerfile
+      dockerfile: .docker/php/prod/prod-alpine.Dockerfile
     container_name: bs-backend
     restart: unless-stopped
     tty: true

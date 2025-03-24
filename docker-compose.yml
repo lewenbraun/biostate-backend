@@ -3,13 +3,15 @@ services:
   bs-backend:
     build:
       context: .
-      dockerfile: .docker/php/Dockerfile
+      dockerfile: .docker/php/dev/dev.Dockerfile
     container_name: bs-backend
     restart: unless-stopped
     tty: true
     environment:
       - no_proxy=.bs-backend
     working_dir: /var/www
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - .:/var/www
       - .docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
@@ -73,8 +75,8 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: "172.30.0.0/24"
-          gateway: 172.30.0.1
+        - subnet: "172.32.0.0/24"
+          gateway: 172.32.0.1
 
 volumes:
   bs-db-data:
