@@ -1,42 +1,44 @@
 services:
   # Backend Application (Laravel)
-  wte-backend:
+  bs-backend:
     build:
       context: .
-      dockerfile: .docker/php/Dockerfile
-    container_name: wte-backend
+      dockerfile: .docker/php/dev/dev.Dockerfile
+    container_name: bs-backend
     restart: unless-stopped
     tty: true
     environment:
-      - no_proxy=.wte-backend
+      - no_proxy=.bs-backend
     working_dir: /var/www
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - .:/var/www
       - .docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
-      - wte-network
+      - bs-network
     depends_on:
-      - wte-db
+      - bs-db
 
   # Backend Nginx (serving Laravel)
-  wte-nginx-backend:
+  bs-nginx-backend:
     image: nginx:stable-alpine
-    container_name: wte-nginx-backend
+    container_name: bs-nginx-backend
     restart: unless-stopped
     ports:
-      - "8080:80"  # Expose backend on port 8080 for debugging if needed
+      - "8080:80"
     volumes:
       - .:/var/www
       - ./.docker/nginx:/etc/nginx/conf.d
     networks:
-      - wte-network
+      - bs-network
     depends_on:
-      - wte-backend
+      - bs-backend
 
   # Database
-  wte-db:
+  bs-db:
     image: postgres:latest
-    container_name: wte-db
+    container_name: bs-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_DATABASE}
@@ -45,37 +47,37 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - wte-db-data:/var/lib/postgresql/data
+      - bs-db-data:/var/lib/postgresql/data
     networks:
-      - wte-network
+      - bs-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
 
   # Frontend (Quasar) dev mode
-  wte-frontend-dev:
+  bs-frontend-dev:
     build:
-      context: ../wte-frontend
+      context: ../bs-frontend
       dockerfile: .docker/dockerfiles/dev.Dockerfile
-    container_name: wte-frontend-dev
+    container_name: bs-frontend-dev
     volumes:
-      - ../wte-frontend:/app
+      - ../bs-frontend:/app
     restart: unless-stopped
     ports:
       - "80:9000"
     networks:
-      - wte-network
+      - bs-network
 
 networks:
-  wte-network:
+  bs-network:
     driver: bridge
     ipam:
       config:
-        - subnet: "172.30.0.0/24"
-          gateway: 172.30.0.1
+        - subnet: "172.32.0.0/24"
+          gateway: 172.32.0.1
 
 volumes:
-  wte-db-data:
+  bs-db-data:
     driver: local
