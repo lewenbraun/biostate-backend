@@ -6,6 +6,7 @@ namespace App\Http\Controllers\API\V1\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\ResponseFactory;
@@ -16,9 +17,7 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request): JsonResponse
     {
-        $user = auth()->user();
-
-        $user->update([
+        $user = User::create([
             'email' => $request['email'],
             'password' => bcrypt($request['password']),
             'is_temporary'  => false,
