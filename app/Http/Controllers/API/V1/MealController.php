@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Meal;
 use App\Models\MealProduct;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Meal\MealResource;
 use App\Http\Services\Meal\ProductService;
@@ -15,14 +18,14 @@ use App\Http\Requests\Meal\ChangeCountProductRequest;
 use App\Http\Requests\Meal\UpdateWeightProductRequest;
 use App\Http\Requests\General\Authorize\RequiredIdRequest;
 use App\Http\Requests\General\Authorize\RequiredDateRequest;
+use App\Http\Services\Meal\Contracts\ProductServiceInterface;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Log;
 
 class MealController extends Controller
 {
-    private $productService;
+    private ProductServiceInterface $productService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductServiceInterface $productService)
     {
         $this->productService = $productService;
     }

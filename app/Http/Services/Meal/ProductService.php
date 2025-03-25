@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Services\Meal;
 
 use App\Models\Meal;
@@ -7,8 +9,9 @@ use App\Models\MealProduct;
 use Illuminate\Http\Request;
 use App\Http\DTO\Meal\Product\ProductFeaturesDTO;
 use App\Http\DTO\Meal\Product\FormattedProductFeaturesDTO;
+use App\Http\Services\Meal\Contracts\ProductServiceInterface;
 
-final class ProductService
+final class ProductService implements ProductServiceInterface
 {
     private const WEIGHT_FACTOR_BASE = 100;
 
