@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\API\V1;
 
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Meal\ProductService;
 use App\Http\Requests\Product\ProductCreateRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Http\Requests\General\Authorize\RequiredIdRequest;
-use Illuminate\Support\Facades\Log;
+use App\Http\Services\Meal\Contracts\ProductServiceInterface;
 
 class ProductController extends Controller
 {
-    public $productService;
+    public ProductServiceInterface $productService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductServiceInterface $productService)
     {
         $this->productService = $productService;
     }
