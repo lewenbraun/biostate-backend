@@ -15,12 +15,12 @@ use App\Http\Requests\Auth\RegisterRequest;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request): JsonResponse
+    public function register(RegisterRequest $request): JsonResponse|Response
     {
         $user = User::create([
+            'name' => $request['name'],
             'email' => $request['email'],
             'password' => bcrypt($request['password']),
-            'is_temporary'  => false,
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
@@ -31,7 +31,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse|Response
     {
         if (!Auth::attempt($request->toArray())) {
             return response([
