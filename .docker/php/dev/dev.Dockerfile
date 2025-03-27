@@ -31,10 +31,6 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 COPY . .
 RUN composer dump-autoload --optimize
 
-# Set permissions for storage and cache directories
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
-
 # Copy PHP configuration
 COPY .docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
@@ -46,5 +42,7 @@ RUN pecl install xdebug \
 COPY .docker/php/dev/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 EXPOSE 9000
-HEALTHCHECK --interval=5s --timeout=3s CMD curl -f http://localhost:9000 || exit 1
+
+# Use the entrypoint script to adjust permissions before starting the main process
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["php-fpm"]
