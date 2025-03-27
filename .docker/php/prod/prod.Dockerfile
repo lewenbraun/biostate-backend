@@ -1,14 +1,16 @@
-FROM php:8.4
+FROM php:8.4-fpm
 
-# Install dependencies
-RUN apk --no-cache add \
+# Update package lists and install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     zip \
     nano \
     unzip \
-    postgresql-dev \
+    libpq-dev \
     git \
-    && docker-php-ext-install pdo pdo_pgsql opcache
+    && docker-php-ext-install pdo pdo_pgsql opcache \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install Composer (multi-stage build)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
