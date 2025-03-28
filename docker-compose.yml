@@ -61,7 +61,7 @@ services:
   # Frontend (Quasar) dev mode
   bs-frontend-dev:
     build:
-      context: ../bs-frontend
+      context: ../biostate-frontend
       dockerfile: .docker/dockerfiles/dev.Dockerfile
     container_name: bs-frontend-dev
     volumes:
