@@ -57,7 +57,7 @@ services:
   # Frontend (Quasar) served by Nginx
   bs-frontend:
     build:
-      context: ../bs-frontend
+      context: ../biostate-frontend
       dockerfile: .docker/dockerfiles/prod.Dockerfile
     container_name: bs-frontend
     restart: unless-stopped
