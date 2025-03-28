@@ -29,6 +29,7 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 
 # Copy application files
 COPY . .
+
 RUN composer dump-autoload --optimize
 
 # Copy PHP configuration
@@ -44,5 +45,5 @@ COPY .docker/php/dev/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.
 EXPOSE 9000
 
 # Use the entrypoint script to adjust permissions before starting the main process
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["bash", "/var/www/.docker/php/dev/entrypoint.sh"]
 CMD ["php-fpm"]
