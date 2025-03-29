@@ -27,6 +27,7 @@ class ProductController extends Controller
     {
         $products = Product::orderBy('created_at', 'asc')
             ->where('user_id', auth()->id())
+            ->orWhere('is_public', true)
             ->get();
 
         return response()->json($products);
