@@ -65,7 +65,7 @@ services:
       dockerfile: .docker/dockerfiles/dev.Dockerfile
     container_name: bs-frontend-dev
     volumes:
-      - ../bs-frontend:/app
+      - ../biostate-frontend:/app
     restart: unless-stopped
     ports:
       - "80:9000"
