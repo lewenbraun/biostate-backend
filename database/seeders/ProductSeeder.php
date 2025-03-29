@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Product;
@@ -23,7 +25,8 @@ class ProductSeeder extends Seeder
                 'calories' => 165.0,
                 'proteins' => 31.0,
                 'carbs' => 0.0,
-                'fats' => 3.6
+                'fats' => 3.6,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -35,7 +38,8 @@ class ProductSeeder extends Seeder
                 'calories' => 208.0,
                 'proteins' => 22.0,
                 'carbs' => 0.0,
-                'fats' => 13.0
+                'fats' => 13.0,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -47,7 +51,8 @@ class ProductSeeder extends Seeder
                 'calories' => 343.0,
                 'proteins' => 13.0,
                 'carbs' => 71.0,
-                'fats' => 3.5
+                'fats' => 3.5,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -59,7 +64,8 @@ class ProductSeeder extends Seeder
                 'calories' => 146.0,
                 'proteins' => 20.0,
                 'carbs' => 8.0,
-                'fats' => 4.5
+                'fats' => 4.5,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -71,7 +77,8 @@ class ProductSeeder extends Seeder
                 'calories' => 23.0,
                 'proteins' => 2.9,
                 'carbs' => 3.6,
-                'fats' => 0.4
+                'fats' => 0.4,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -83,7 +90,8 @@ class ProductSeeder extends Seeder
                 'calories' => 368.0,
                 'proteins' => 14.0,
                 'carbs' => 64.0,
-                'fats' => 6.1
+                'fats' => 6.1,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -95,7 +103,8 @@ class ProductSeeder extends Seeder
                 'calories' => 614.0,
                 'proteins' => 21.0,
                 'carbs' => 20.0,
-                'fats' => 54.0
+                'fats' => 54.0,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -107,7 +116,8 @@ class ProductSeeder extends Seeder
                 'calories' => 143.0,
                 'proteins' => 12.6,
                 'carbs' => 0.7,
-                'fats' => 9.5
+                'fats' => 9.5,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -119,7 +129,8 @@ class ProductSeeder extends Seeder
                 'calories' => 160.0,
                 'proteins' => 2.0,
                 'carbs' => 8.5,
-                'fats' => 14.7
+                'fats' => 14.7,
+                'it_public' => true,
             ],
             [
                 'user_id' => 1,
@@ -131,7 +142,8 @@ class ProductSeeder extends Seeder
                 'calories' => 86.0,
                 'proteins' => 1.6,
                 'carbs' => 20.0,
-                'fats' => 0.1
+                'fats' => 0.1,
+                'it_public' => true,
             ]
         ];
 
