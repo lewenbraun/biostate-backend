@@ -61,8 +61,12 @@ services:
       dockerfile: .docker/dockerfiles/prod.Dockerfile
     container_name: bs-frontend
     restart: unless-stopped
+    environment:
+      DOMAIN: ${APP_URL}
+      EMAIL: ${EMAIL}
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - bs-network
 
