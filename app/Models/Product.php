@@ -16,7 +16,7 @@ class Product extends Model
     /**
      * Get the meals associated with the Product
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne<Meal, $this>
      */
     public function meals(): HasOne
     {

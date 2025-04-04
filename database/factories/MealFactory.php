@@ -8,6 +8,9 @@ use App\Models\Meal;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<Meal>
+ */
 class MealFactory extends Factory
 {
     protected $model = Meal::class;

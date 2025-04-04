@@ -21,7 +21,7 @@ class Meal extends Model
     /**
      * The roles that belong to the Meal
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany<Product, $this>
      */
     public function products(): BelongsToMany
     {

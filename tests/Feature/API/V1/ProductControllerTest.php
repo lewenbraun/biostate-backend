@@ -24,7 +24,7 @@ class ProductControllerTest extends TestCase
         $this->actingAs($this->user, 'sanctum');
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         Product::factory()->count(3)->create(['user_id' => $this->user->id]);
         Product::factory()->create(['user_id' => User::factory()->create()->id]);
@@ -35,7 +35,7 @@ class ProductControllerTest extends TestCase
             ->assertJsonCount(3);
     }
 
-    public function testSearch()
+    public function testSearch(): void
     {
         Product::factory()->create(['name' => 'Apple Pie', 'description' => 'Delicious apple pie']);
         Product::factory()->create(['name' => 'Banana Bread', 'description' => 'Homemade banana bread']);
@@ -57,7 +57,7 @@ class ProductControllerTest extends TestCase
             ->assertJsonPath('0.name', 'Orange Juice');
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $payload = [
             'name' => 'New Product',
@@ -74,9 +74,7 @@ class ProductControllerTest extends TestCase
 
         $mock->shouldReceive('getFormattedProductData')
             ->once()
-            ->with(\Mockery::on(function ($request) use ($payload) {
-                return $request->all() === $payload;
-            }))
+            ->with(\Mockery::on(fn($request): bool => $request->all() === $payload))
             ->andReturn($payload + ['user_id' => $this->user->id]);
 
         $response = $this->postJson('/api/v1/products/create', $payload);
@@ -87,7 +85,7 @@ class ProductControllerTest extends TestCase
         $this->assertDatabaseHas('products', $payload + ['user_id' => $this->user->id]);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $product = Product::factory()->create(['user_id' => $this->user->id]);
         $payload = [
@@ -106,9 +104,7 @@ class ProductControllerTest extends TestCase
 
         $mock->shouldReceive('getFormattedProductData')
             ->once()
-            ->with(\Mockery::on(function ($request) use ($payload) {
-                return $request->all() === $payload;
-            }))
+            ->with(\Mockery::on(fn($request): bool => $request->all() === $payload))
             ->andReturn($payload + ['user_id' => $this->user->id]);
 
         $response = $this->postJson("/api/v1/products/update", $payload);
@@ -127,7 +123,7 @@ class ProductControllerTest extends TestCase
         $this->assertDatabaseHas('products', array_merge($payload, ['user_id' => $this->user->id]));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $product = Product::factory()->create(['user_id' => $this->user->id]);
 
@@ -139,7 +135,7 @@ class ProductControllerTest extends TestCase
         $this->assertDatabaseMissing('products', ['id' => $product->id]);
     }
 
-    public function testShow()
+    public function testShow(): void
     {
         $product = Product::factory()->create(['user_id' => $this->user->id]);
 

@@ -21,9 +21,7 @@ class NutrientsFormatService
             $daysData = [];
 
             while ($iterableDate->lte($endDate)) {
-                $dailyMeals = $mealsForPeriod->filter(function ($meal) use ($iterableDate) {
-                    return $meal->date->isSameDay($iterableDate);
-                });
+                $dailyMeals = $mealsForPeriod->filter(fn($meal) => $meal->date->isSameDay($iterableDate));
                 if ($dailyMeals->isEmpty()) {
                     $daysData[] = [
                         'date' => $iterableDate->format('d.m'),
@@ -51,12 +49,10 @@ class NutrientsFormatService
 
     private function calculateDailyNutrientTotal(string $nutrient, Collection $meals): float
     {
-        $sumMeals = $meals->sum(function ($meal) use ($nutrient) {
-            return $meal->products->sum(function ($product) use ($nutrient) {
-                $portionWeight = $product->weight_product / $product->weight_for_features * $product->pivot->count;
-                return $product->$nutrient * $portionWeight;
-            });
-        });
+        $sumMeals = $meals->sum(fn($meal) => $meal->products->sum(function ($product) use ($nutrient): int|float {
+            $portionWeight = $product->weight_product / $product->weight_for_features * $product->pivot->count;
+            return $product->$nutrient * $portionWeight;
+        }));
 
         return round($sumMeals);
     }
@@ -67,7 +63,7 @@ class NutrientsFormatService
 
         return $user->meals()
             ->whereBetween('date', [$startDate, $endDate])
-            ->with(['products' => function ($query) use ($selectWithNutrients) {
+            ->with(['products' => function ($query) use ($selectWithNutrients): void {
                 $query->select($selectWithNutrients);
             }])
             ->get();

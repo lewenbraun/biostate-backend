@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class StatisticsController extends Controller
 {
-    private $nutrientsFormatService;
+    private NutrientsFormatService $nutrientsFormatService;
 
     public function __construct(NutrientsFormatService $nutrientsFormatService)
     {
