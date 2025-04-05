@@ -1,14 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\DTO\Meal\Product;
 
 class FormattedProductFeaturesDTO
 {
-    public $calories;
-    public $proteins;
-    public $carbs;
-    public $fats;
+    public float $calories;
+    public float $proteins;
+    public float $carbs;
+    public float $fats;
 
+    /**
+     * @param array<string, float> $data
+     */
     public static function fromArray(array $data): self
     {
         $dto = new self();
@@ -19,6 +24,9 @@ class FormattedProductFeaturesDTO
         return $dto;
     }
 
+    /**
+     * @return array<string, float>
+     */
     public function toArray(): array
     {
         return [

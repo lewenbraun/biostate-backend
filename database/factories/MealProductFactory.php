@@ -8,7 +8,7 @@ use App\Models\MealProduct;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MealProduct>
+ * @extends Factory<MealProduct>
  */
 class MealProductFactory extends Factory
 {

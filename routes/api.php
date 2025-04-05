@@ -8,14 +8,14 @@ use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\Auth\AuthController;
 use App\Http\Controllers\API\V1\StatisticsController;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::group(['prefix' => 'user'], function () {
+Route::middleware('auth:sanctum')->group(function (): void {
+    Route::group(['prefix' => 'user'], function (): void {
         Route::post('/update', [UserController::class, 'update']);
         Route::get('/max-nutrients', [UserController::class, 'maxNutrients']);
         Route::get('/profile-data', [UserController::class, 'profileData']);
     });
 
-    Route::group(['prefix' => 'daily-meal'], function () {
+    Route::group(['prefix' => 'daily-meal'], function (): void {
         Route::get('/', [MealController::class, 'show']);
         Route::post('/product/add', [MealController::class, 'addProductIntoMeal']);
         Route::post('/product/delete', [MealController::class, 'deleteProduct']);
@@ -25,12 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/meal/create', [MealController::class, 'createMeal']);
         Route::post('/meal/delete', [MealController::class, 'deleteMeal']);
 
-        Route::group(['prefix' => 'statistics'], function () {
+        Route::group(['prefix' => 'statistics'], function (): void {
             Route::get('/day', [MealController::class, 'statisticsPerDay']);
         });
     });
 
-    Route::group(['prefix' => 'products'], function () {
+    Route::group(['prefix' => 'products'], function (): void {
         Route::get('/', [ProductController::class, 'index']);
         Route::post('/create', [ProductController::class, 'create']);
         Route::get('/search/{name}', [ProductController::class, 'search']);
@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/delete', [ProductController::class, 'delete']);
     });
 
-    Route::group(['prefix' => 'statistics'], function () {
+    Route::group(['prefix' => 'statistics'], function (): void {
         Route::get('/sum-nutrients-for-period-date', [StatisticsController::class, 'sumNutrientsForPeriodDate']);
     });
 

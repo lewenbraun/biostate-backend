@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\API\V1;
 
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\User;
 
 class UserController extends Controller
 {
     public function profileData(): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
 
         return response()->json([
@@ -20,6 +24,7 @@ class UserController extends Controller
 
     public function maxNutrients(): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
 
         return response()->json([
@@ -32,6 +37,7 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
 
         $user->update([

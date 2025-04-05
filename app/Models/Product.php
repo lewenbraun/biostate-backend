@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Models\Meal;
+use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
+    /** @use HasFactory<ProductFactory> */
     use HasFactory;
 
     protected $guarded = [];
@@ -16,7 +18,7 @@ class Product extends Model
     /**
      * Get the meals associated with the Product
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne<Meal, $this>
      */
     public function meals(): HasOne
     {

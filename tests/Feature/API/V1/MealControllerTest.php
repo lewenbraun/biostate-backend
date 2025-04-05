@@ -25,7 +25,7 @@ class MealControllerTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-    public function testCreateMeal()
+    public function testCreateMeal(): void
     {
         $payload = [
             'date'       => '2025-03-24',
@@ -49,7 +49,7 @@ class MealControllerTest extends TestCase
         ]);
     }
 
-    public function testDeleteMeal()
+    public function testDeleteMeal(): void
     {
         $meal = Meal::factory()->create([
             'user_id' => $this->user->id,
@@ -62,7 +62,7 @@ class MealControllerTest extends TestCase
         $this->assertDatabaseMissing('meals', ['id' => $meal->id]);
     }
 
-    public function testAddProductIntoMeal()
+    public function testAddProductIntoMeal(): void
     {
         $meal = Meal::factory()->create([
             'date'       => '2025-03-24',
@@ -77,9 +77,7 @@ class MealControllerTest extends TestCase
 
         $mock->shouldReceive('addProductOrIncreaseCountIntoMeal')
              ->once()
-             ->with($product->id, 200, \Mockery::on(function ($arg) use ($meal) {
-                 return $arg->id === $meal->id;
-             }));
+             ->with($product->id, 200, \Mockery::on(fn($arg): bool => $arg->id === $meal->id));
 
         $payload = [
             'date'       => '2025-03-24',
@@ -95,7 +93,7 @@ class MealControllerTest extends TestCase
                  ->assertJson(['message' => 'Product added successfully.']);
     }
 
-    public function testShowMeals()
+    public function testShowMeals(): void
     {
         Meal::factory()->create([
             'date'       => '2025-03-24',
@@ -118,7 +116,7 @@ class MealControllerTest extends TestCase
                  ]);
     }
 
-    public function testDeleteProduct()
+    public function testDeleteProduct(): void
     {
         $meal = Meal::factory()->create(['user_id' => $this->user->id]);
         $product = Product::factory()->create();
@@ -146,7 +144,7 @@ class MealControllerTest extends TestCase
         ]);
     }
 
-    public function testIncreaseCountProduct()
+    public function testIncreaseCountProduct(): void
     {
         $meal = Meal::factory()->create(['user_id' => $this->user->id]);
         $product = Product::factory()->create();
@@ -159,9 +157,7 @@ class MealControllerTest extends TestCase
 
         $mock->shouldReceive('increaseCountProduct')
              ->once()
-             ->with(\Mockery::on(function ($arg) use ($attachedProduct) {
-                 return $arg->id === $attachedProduct->id;
-             }));
+             ->with(\Mockery::on(fn($arg): bool => $arg->id === $attachedProduct->id));
 
         $payload = [
             'meal_id'    => $meal->id,
@@ -175,7 +171,7 @@ class MealControllerTest extends TestCase
                  ->assertJson(['message' => 'Product count increased successfully.']);
     }
 
-    public function testDecreaseCountProduct_Detach()
+    public function testDecreaseCountProduct_Detach(): void
     {
         $meal = Meal::factory()->create(['user_id' => $this->user->id]);
         $product = Product::factory()->create();
@@ -196,7 +192,7 @@ class MealControllerTest extends TestCase
         $this->assertFalse($meal->products()->where('product_id', $product->id)->exists());
     }
 
-    public function testDecreaseCountProduct_Decrease()
+    public function testDecreaseCountProduct_Decrease(): void
     {
         $meal = Meal::factory()->create(['user_id' => $this->user->id]);
         $product = Product::factory()->create();
@@ -209,9 +205,7 @@ class MealControllerTest extends TestCase
 
         $mock->shouldReceive('decreaseCountProduct')
              ->once()
-             ->with(\Mockery::on(function ($arg) use ($attachedProduct) {
-                 return $arg->id === $attachedProduct->id;
-             }));
+             ->with(\Mockery::on(fn($arg): bool => $arg->id === $attachedProduct->id));
 
         $payload = [
             'meal_id'    => $meal->id,
@@ -225,7 +219,7 @@ class MealControllerTest extends TestCase
                  ->assertJson(['message' => 'Product count decreased successfully.']);
     }
 
-    public function testUpdateWeightProduct()
+    public function testUpdateWeightProduct(): void
     {
         $meal = Meal::factory()->create(['user_id' => $this->user->id]);
         $product = Product::factory()->create();

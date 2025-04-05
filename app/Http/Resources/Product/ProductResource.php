@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Product
+ */
 class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -21,12 +28,11 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'weight' => $this->weight,
             'weight_for_features' => $this->weight_for_features,
-            'image' => $this->image,
             'calories' => $this->calories,
             'proteins' => $this->proteins,
             'carbs' => $this->carbs,
             'fats' => $this->fats,
-            'count' => $this->pivot->count,
+            'count' => $this->getRelationValue('pivot')->count,
             'is_public' => $this->is_public,
             'is_alcohol' => $this->is_alcohol,
         ];
