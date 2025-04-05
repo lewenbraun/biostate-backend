@@ -15,6 +15,9 @@ final class ProductService implements ProductServiceInterface
 {
     private const WEIGHT_FACTOR_BASE = 100;
 
+    /**
+     * @return array<string, int|string|float|bool|null>
+     */
     public function getFormattedProductData(Request $request): array
     {
         $productData = [
@@ -56,14 +59,14 @@ final class ProductService implements ProductServiceInterface
 
     public function increaseCountProduct($product): void
     {
-        $product->pivot->count += 1;
-        $product->pivot->save();
+        $product->getRelationValue('pivot')->count += 1;
+        $product->getRelationValue('pivot')->save();
     }
 
     public function decreaseCountProduct($product): void
     {
-        $product->pivot->count -= 1;
-        $product->pivot->save();
+        $product->getRelationValue('pivot')->count -= 1;
+        $product->getRelationValue('pivot')->save();
     }
 
     public function formatFeatures(ProductFeaturesDTO $productFeatures): FormattedProductFeaturesDTO

@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Meal;
 use Laravel\Sanctum\HasApiTokens;
+use Database\Factories\UserFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    /** @use HasFactory<UserFactory> */
     use HasFactory;
     use Notifiable;
     use HasApiTokens;
@@ -19,7 +23,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -35,7 +39,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -55,7 +59,10 @@ class User extends Authenticatable
         ];
     }
 
-    public function meals()
+    /**
+     * @return HasMany<Meal, $this>
+     */
+    public function meals(): HasMany
     {
         return $this->hasMany(Meal::class);
     }

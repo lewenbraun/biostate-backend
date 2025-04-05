@@ -8,7 +8,6 @@ use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Http\Services\Meal\ProductService;
 use App\Http\Requests\Product\ProductCreateRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Http\Requests\General\Authorize\RequiredIdRequest;
@@ -50,8 +49,8 @@ class ProductController extends Controller
 
             return response()->json($product, 200);
         } catch (\Exception $e) {
-            Log::error('Error creating product: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while creating the product.'], 500);
+            Log::error(__('log_error.creating_product') . $e->getMessage());
+            return response()->json(['message' => __('errors.creating_the_product')], 500);
         }
     }
 
@@ -59,22 +58,22 @@ class ProductController extends Controller
     {
         try {
             $formattedProductData = $this->productService->getFormattedProductData($request);
-            $product = Product::findOrFail($request->id);
+            $product = Product::findOrFail($request->integer('id'));
             $product->update($formattedProductData);
 
             return response()->json($product);
         } catch (\Exception $e) {
-            Log::error('Error updating product: ' . $e->getMessage());
-            return response()->json(['message' => 'An error occurred while updating the product.'], 500);
+            Log::error(__('log_error.updating_product') . $e->getMessage());
+            return response()->json(['message' => __('errors.updating_the_product')], 500);
         }
     }
 
     public function delete(RequiredIdRequest $request): JsonResponse
     {
-        $product = Product::findOrFail($request->id);
+        $product = Product::findOrFail($request->integer('id'));
         $product->delete();
 
-        return response()->json(['message' => 'Product deleted successfully']);
+        return response()->json(['message' => __('messages.product_deleted_successfully')]);
     }
 
     public function show(Product $product): JsonResponse

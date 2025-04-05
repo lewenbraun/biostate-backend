@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\API\V1\Auth;
 
+use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Routing\ResponseFactory;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 
@@ -35,11 +35,17 @@ class AuthController extends Controller
     {
         if (!Auth::attempt($request->toArray())) {
             return response([
-                'error' => 'The Provided credentials are not correct',
+                'error' => __('errors.the_provided_credentials_are_not_correct'),
             ], 422);
         }
 
         $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'error' => __('errors.authentication_failed'),
+            ], 401);
+        }
 
         $token = $user->createToken('main')->plainTextToken;
 
@@ -53,7 +59,11 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
-        $user->currentAccessToken()->delete();
+        if ($user) {
+            /** @var PersonalAccessToken $token */
+            $token = $user->currentAccessToken();
+            $token->delete();
+        }
 
         return response()->json();
     }
